@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reference — Ing. Monika Novotná</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --green-light:   #f4f9f0;
+      --green-mid:     #c8dba8;
+      --green-accent:  #6a9e45;
+      --green-dark:    #3d6b22;
+      --green-deep:    #1c2316;
+      --gold:          #c9952a;
+      --gold-light:    #fdf3dc;
+      --cream:         #faf8f4;
+      --text-dark:     #1c2316;
+      --text-mid:      #4a5240;
+      --text-light:    #7a8470;
+      --border:        #ddd8ce;
+      --font-serif: 'Cormorant Garamond', Georgia, serif;
+      --font-sans:  'Jost', system-ui, sans-serif;
+      --max-width: 1100px;
+      --section-padding: 80px 24px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-sans); font-size: 16px; line-height: 1.7; color: var(--text-dark); background: var(--cream); }
+    img { max-width: 100%; height: auto; display: block; }
+    a { color: inherit; text-decoration: none; }
+
+    /* NAVIGACE */
+    .nav { position: sticky; top: 0; z-index: 100; background: rgba(250, 248, 244, 0.95); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); }
+    .nav-inner { max-width: var(--max-width); margin: 0 auto; padding: 0 24px; height: 64px; display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { font-family: var(--font-serif); font-size: 20px; font-weight: 400; color: var(--text-dark); }
+    .nav-logo span { color: var(--green-dark); font-style: italic; }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a { font-size: 12px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-mid); transition: color 0.2s; padding-bottom: 2px; border-bottom: 1px solid transparent; }
+    .nav-links a:hover, .nav-links a.active { color: var(--green-dark); border-bottom-color: var(--green-accent); }
+    .nav-cta { font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: #fff; background: var(--green-dark); padding: 9px 20px; border-radius: 4px; transition: background 0.2s; }
+    .nav-cta:hover { background: var(--green-accent); }
+    .nav-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; background: none; border: none; }
+    .nav-hamburger span { display: block; width: 24px; height: 1.5px; background: var(--text-dark); transition: transform 0.3s, opacity 0.3s; }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+    .nav-mobile { display: none; flex-direction: column; background: var(--cream); border-bottom: 1px solid var(--border); padding: 16px 24px 24px; gap: 4px; }
+    .nav-mobile.open { display: flex; }
+    .nav-mobile a { font-size: 15px; color: var(--text-mid); padding: 10px 0; border-bottom: 1px solid var(--border); letter-spacing: 0.05em; }
+    .nav-mobile a:last-child { border-bottom: none; }
+    .nav-mobile a:hover { color: var(--green-dark); }
+
+    /* PAGE HEADER */
+    .page-header { background: var(--green-light); border-bottom: 1px solid var(--green-mid); padding: 56px 24px 48px; }
+    .page-header-inner { max-width: var(--max-width); margin: 0 auto; }
+    .breadcrumb { display: flex; gap: 8px; align-items: center; font-size: 12px; color: var(--text-light); margin-bottom: 16px; }
+    .breadcrumb a { color: var(--green-dark); transition: color 0.2s; }
+    .page-title { font-family: var(--font-serif); font-size: clamp(36px, 5vw, 56px); font-weight: 300; line-height: 1.15; color: var(--text-dark); margin-bottom: 16px; }
+    .page-lead { font-size: 17px; color: var(--text-mid); max-width: 580px; line-height: 1.75; }
+
+    .section { padding: var(--section-padding); }
+    .section-inner { max-width: var(--max-width); margin: 0 auto; }
+    .section-eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--green-dark); margin-bottom: 12px; }
+    .section-title { font-family: var(--font-serif); font-size: clamp(26px, 3.5vw, 38px); font-weight: 300; line-height: 1.2; color: var(--text-dark); margin-bottom: 20px; }
+
+    /* ============================================
+       ČASOVÁ OSA REFERENCÍ
+       Stejný styl jako historie na stránce iridologie —
+       vertikální čára vlevo, každá reference je jedna
+       položka na ose s iniciálami místo data.
+    ============================================ */
+    .testimonials-timeline {
+      position: relative;
+      margin-top: 48px;
+      padding-left: 32px;
+      max-width: 780px;
+    }
+
+    /* Svislá zelená čára */
+    .testimonials-timeline::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 8px;
+      bottom: 8px;
+      width: 1px;
+      background: var(--green-mid);
+    }
+
+    .testimonial-item {
+      position: relative;
+      margin-bottom: 48px;
+      padding-left: 28px;
+    }
+
+    .testimonial-item:last-child { margin-bottom: 0; }
+
+    /* Kroužek s iniciálami na ose — místo datumu jako u historie */
+    .testimonial-avatar {
+      position: absolute;
+      left: -52px;
+      top: 0;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--green-light);
+      border: 1px solid var(--green-mid);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-serif);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--green-dark);
+    }
+
+    /* Karta reference */
+    .testimonial-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 28px 32px;
+    }
+
+    /* Záhlaví karty: jméno + věk + téma */
+    .testimonial-header {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .testimonial-name {
+      font-family: var(--font-serif);
+      font-size: 20px;
+      font-weight: 400;
+      color: var(--text-dark);
+    }
+
+    .testimonial-age {
+      font-size: 13px;
+      color: var(--text-light);
+    }
+
+    /* Téma konzultace — zlatý štítek */
+    .testimonial-topic {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 20px;
+      background: var(--gold-light);
+      color: var(--gold);
+      border: 1px solid #f0e0b8;
+      margin-left: auto;
+    }
+
+    /* Uvozovky před textem reference */
+    .testimonial-quote {
+      font-family: var(--font-serif);
+      font-size: 18px;
+      font-style: italic;
+      font-weight: 300;
+      color: var(--text-mid);
+      line-height: 1.75;
+      padding-left: 20px;
+      border-left: 2px solid var(--green-mid);
+    }
+
+    /* Placeholder verze karty — pro lokální testování */
+    .testimonial-card.placeholder {
+      border-style: dashed;
+      border-color: var(--green-mid);
+      background: var(--green-light);
+    }
+
+    .testimonial-card.placeholder .testimonial-quote {
+      color: var(--text-light);
+      font-style: normal;
+      font-size: 14px;
+    }
+
+    /* ============================================
+       VÝZVA K PŘIDÁNÍ REFERENCE
+       Zobrazí se po existujících referencích jako
+       pozvánka pro nové klienty
+    ============================================ */
+    .add-reference {
+      margin-top: 48px;
+      padding: 32px;
+      background: var(--green-light);
+      border: 1px solid var(--green-mid);
+      border-radius: 6px;
+      max-width: 780px;
+      text-align: center;
+    }
+
+    .add-reference h3 {
+      font-family: var(--font-serif);
+      font-size: 22px;
+      font-weight: 400;
+      color: var(--text-dark);
+      margin-bottom: 8px;
+    }
+
+    .add-reference p {
+      font-size: 14px;
+      color: var(--text-mid);
+      margin-bottom: 20px;
+    }
+
+    .btn { display: inline-block; font-family: var(--font-sans); font-size: 12px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; padding: 11px 24px; border-radius: 4px; border: 1.5px solid transparent; cursor: pointer; transition: all 0.2s; }
+    .btn-primary { background: var(--green-dark); color: #fff; border-color: var(--green-dark); }
+    .btn-primary:hover { background: var(--green-accent); border-color: var(--green-accent); }
+    .btn-outline { background: transparent; color: var(--green-dark); border-color: var(--green-dark); }
+    .btn-outline:hover { background: var(--green-light); }
+
+    /* CTA sekce */
+    .cta-section { background: var(--green-deep); text-align: center; padding: 72px 24px; }
+    .cta-title { font-family: var(--font-serif); font-size: clamp(28px, 4vw, 44px); font-weight: 300; color: #fff; margin-bottom: 12px; }
+    .cta-lead { font-size: 16px; color: rgba(255,255,255,0.6); max-width: 480px; margin: 0 auto 32px; line-height: 1.75; }
+    .cta-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .btn-accent { background: var(--green-accent); color: #fff; border-color: var(--green-accent); }
+    .btn-accent:hover { background: var(--green-dark); border-color: var(--green-dark); }
+    .btn-outline-light { background: transparent; color: var(--green-mid); border-color: var(--green-mid); }
+    .btn-outline-light:hover { background: rgba(200,219,168,0.1); }
+
+    /* FOOTER */
+    .footer { background: var(--green-deep); color: rgba(255,255,255,0.6); padding: 48px 24px; border-top: 1px solid rgba(255,255,255,0.07); }
+    .footer-inner { max-width: var(--max-width); margin: 0 auto; display: grid; grid-template-columns: 1fr auto; gap: 32px; align-items: start; }
+    .footer-logo { font-family: var(--font-serif); font-size: 20px; color: #fff; margin-bottom: 8px; }
+    .footer-logo span { font-style: italic; color: var(--green-mid); }
+    .footer-tagline { font-size: 13px; color: rgba(255,255,255,0.5); margin-bottom: 16px; }
+    .footer-contact a { display: block; font-size: 13px; color: var(--green-mid); margin-bottom: 4px; transition: color 0.2s; }
+    .footer-contact a:hover { color: #fff; }
+    .footer-links { display: flex; flex-direction: column; gap: 8px; text-align: right; }
+    .footer-links a { font-size: 12px; color: rgba(255,255,255,0.5); transition: color 0.2s; letter-spacing: 0.05em; }
+    .footer-links a:hover { color: var(--green-mid); }
+    .footer-bottom { max-width: var(--max-width); margin: 32px auto 0; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; font-size: 11px; color: rgba(255,255,255,0.3); flex-wrap: wrap; gap: 8px; }
+
+    @media (max-width: 640px) {
+      :root { --section-padding: 48px 16px; }
+      .nav-links, .nav-cta { display: none; }
+      .nav-hamburger { display: flex; }
+      .testimonial-topic { margin-left: 0; margin-top: 4px; }
+      .footer-inner { grid-template-columns: 1fr; }
+      .footer-links { text-align: left; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">Monika <span>Novotná</span></a>
+      <ul class="nav-links">
+        <li><a href="index.html">O mně</a></li>
+        <li><a href="specializace.html">Specializace</a></li>
+        <li><a href="iridologie.html">Iridologie</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="reference.html" class="active">Reference</a></li>
+      </ul>
+      <a href="index.html#objednat" class="nav-cta">Objednat se</a>
+      <button class="nav-hamburger" id="hamburger" aria-label="Otevřít menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="nav-mobile" id="nav-mobile">
+      <a href="index.html">O mně</a>
+      <a href="specializace.html">Specializace</a>
+      <a href="iridologie.html">Iridologie</a>
+      <a href="blog.html">Blog</a>
+      <a href="reference.html">Reference</a>
+      <a href="index.html#objednat" style="color: var(--green-dark); font-weight: 500;">→ Objednat se</a>
+    </div>
+  </nav>
+
+  <header class="page-header">
+    <div class="page-header-inner">
+      <nav class="breadcrumb" aria-label="Kde se nacházíte">
+        <a href="index.html">Domů</a>
+        <span>›</span>
+        <span>Reference</span>
+      </nav>
+      <h1 class="page-title">Co říkají klienti</h1>
+      <p class="page-lead">
+        Každý příběh je jiný. Tady jsou zkušenosti lidí, kteří se rozhodli
+        udělat první krok ke svému zdraví.
+      </p>
+    </div>
+  </header>
+
+  <section class="section" style="background: #fff;">
+    <div class="section-inner">
+      <p class="section-eyebrow">Zkušenosti klientů</p>
+      <h2 class="section-title">Reference</h2>
+
+      <!--
+        ============================================================
+        ČASOVÁ OSA REFERENCÍ
+
+        Jak přidat skutečnou referenci od klienta:
+        1. Zkopíruj celý blok .testimonial-item
+        2. Vyplň:
+           - .testimonial-avatar → 1-2 iniciály klienta (nebo "?" pro anonymní)
+           - .testimonial-name   → Jméno (nebo jen křestní jméno)
+           - .testimonial-age    → věk, např. "38 let"
+           - .testimonial-topic  → téma konzultace
+           - .testimonial-quote  → vlastní text reference
+        3. Odstraň třídu "placeholder" z .testimonial-card
+
+        Důležité: Reference publikuj jen se souhlasem klienta.
+        Pro anonymní reference použij jen křestní jméno nebo iniciály.
+        ============================================================
+      -->
+      <div class="testimonials-timeline">
+
+        <!-- REFERENCE 1 — placeholder -->
+        <div class="testimonial-item">
+          <div class="testimonial-avatar">?</div>
+          <div class="testimonial-card placeholder">
+            <div class="testimonial-header">
+              <span class="testimonial-name">Jméno klienta</span>
+              <span class="testimonial-age">věk</span>
+              <span class="testimonial-topic">Téma konzultace</span>
+            </div>
+            <p class="testimonial-quote">
+              Zde bude text reference od skutečného klienta.
+              Monika doplní po získání souhlasu klienta s publikací.
+            </p>
+          </div>
+        </div>
+
+        <!-- REFERENCE 2 — placeholder -->
+        <div class="testimonial-item">
+          <div class="testimonial-avatar">?</div>
+          <div class="testimonial-card placeholder">
+            <div class="testimonial-header">
+              <span class="testimonial-name">Jméno klienta</span>
+              <span class="testimonial-age">věk</span>
+              <span class="testimonial-topic">Téma konzultace</span>
+            </div>
+            <p class="testimonial-quote">
+              Zde bude text reference od skutečného klienta.
+              Monika doplní po získání souhlasu klienta s publikací.
+            </p>
+          </div>
+        </div>
+
+        <!-- REFERENCE 3 — placeholder -->
+        <div class="testimonial-item">
+          <div class="testimonial-avatar">?</div>
+          <div class="testimonial-card placeholder">
+            <div class="testimonial-header">
+              <span class="testimonial-name">Jméno klienta</span>
+              <span class="testimonial-age">věk</span>
+              <span class="testimonial-topic">Téma konzultace</span>
+            </div>
+            <p class="testimonial-quote">
+              Zde bude text reference od skutečného klienta.
+              Monika doplní po získání souhlasu klienta s publikací.
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Výzva pro nové klienty -->
+      <div class="add-reference">
+        <h3>Byli jste u mě na konzultaci?</h3>
+        <p>
+          Pokud byste se chtěli podělit o svoji zkušenost, budu za to moc ráda.
+          Napište mi e-mail — publikuji jen s vaším výslovným souhlasem.
+        </p>
+        <a href="mailto:monika@healthjam.cz?subject=Reference" class="btn btn-outline">
+          Napsat referenci →
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <p style="font-size:11px; font-weight:500; letter-spacing:0.12em; text-transform:uppercase; color:var(--green-mid); margin-bottom:12px;">Připravena vám pomoct</p>
+    <h2 class="cta-title">Začněme vaším příběhem</h2>
+    <p class="cta-lead">
+      První konzultace je vždy individuální — přijďte s čímkoliv, co vás trápí.
+    </p>
+    <div class="cta-actions">
+      <a href="index.html#objednat" class="btn btn-accent">Objednat se →</a>
+      <a href="specializace.html" class="btn btn-outline-light">Prohlédnout specializace</a>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-logo">Monika <span>Novotná</span></div>
+        <p class="footer-tagline">Terapeutka klinické nutriční medicíny</p>
+        <div class="footer-contact">
+          <a href="mailto:monika@healthjam.cz">monika@healthjam.cz</a>
+          <a href="index.html">healthjam.cz/monikanovotna</a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <a href="specializace.html">Specializace</a>
+        <a href="iridologie.html">Iridologie</a>
+        <a href="blog.html">Blog</a>
+        <a href="reference.html">Reference</a>
+        <a href="newsletter.html">Newsletter</a>
+        <a href="gdpr.html">Ochrana osobních údajů</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Ing. Monika Novotná</span>
+      <a href="gdpr.html" style="color: rgba(255,255,255,0.3);">Ochrana osobních údajů</a>
+    </div>
+  </footer>
+
+  <script>
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('nav-mobile');
+    hamburger.addEventListener('click', function() {
+      hamburger.classList.toggle('open');
+      mobileMenu.classList.toggle('open');
+    });
+    mobileMenu.querySelectorAll('a').forEach(function(link) {
+      link.addEventListener('click', function() {
+        hamburger.classList.remove('open');
+        mobileMenu.classList.remove('open');
+      });
+    });
+  </script>
+
+</body>
+</html>

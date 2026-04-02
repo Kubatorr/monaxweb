@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iridologie — Ing. Monika Novotná</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --green-light:   #f4f9f0;
+      --green-mid:     #c8dba8;
+      --green-accent:  #6a9e45;
+      --green-dark:    #3d6b22;
+      --green-deep:    #1c2316;
+      --gold:          #c9952a;
+      --gold-light:    #fdf3dc;
+      --cream:         #faf8f4;
+      --text-dark:     #1c2316;
+      --text-mid:      #4a5240;
+      --text-light:    #7a8470;
+      --border:        #ddd8ce;
+      --font-serif: 'Cormorant Garamond', Georgia, serif;
+      --font-sans:  'Jost', system-ui, sans-serif;
+      --max-width: 1100px;
+      --section-padding: 80px 24px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-sans);
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--text-dark);
+      background: var(--cream);
+    }
+
+    img { max-width: 100%; height: auto; display: block; }
+    a { color: inherit; text-decoration: none; }
+
+    /* ============================================
+       NAVIGACE
+    ============================================ */
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(250, 248, 244, 0.95);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      max-width: var(--max-width); margin: 0 auto;
+      padding: 0 24px; height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo { font-family: var(--font-serif); font-size: 20px; font-weight: 400; color: var(--text-dark); }
+    .nav-logo span { color: var(--green-dark); font-style: italic; }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a {
+      font-size: 12px; font-weight: 500; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--text-mid);
+      transition: color 0.2s; padding-bottom: 2px;
+      border-bottom: 1px solid transparent;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--green-dark); border-bottom-color: var(--green-accent); }
+    .nav-cta {
+      font-size: 12px; font-weight: 500; letter-spacing: 0.08em;
+      text-transform: uppercase; color: #fff; background: var(--green-dark);
+      padding: 9px 20px; border-radius: 4px; transition: background 0.2s;
+    }
+    .nav-cta:hover { background: var(--green-accent); }
+    .nav-hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      cursor: pointer; padding: 4px; background: none; border: none;
+    }
+    .nav-hamburger span { display: block; width: 24px; height: 1.5px; background: var(--text-dark); transition: transform 0.3s, opacity 0.3s; }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+    .nav-mobile {
+      display: none; flex-direction: column;
+      background: var(--cream); border-bottom: 1px solid var(--border);
+      padding: 16px 24px 24px; gap: 4px;
+    }
+    .nav-mobile.open { display: flex; }
+    .nav-mobile a { font-size: 15px; color: var(--text-mid); padding: 10px 0; border-bottom: 1px solid var(--border); letter-spacing: 0.05em; }
+    .nav-mobile a:last-child { border-bottom: none; }
+    .nav-mobile a:hover { color: var(--green-dark); }
+
+    /* ============================================
+       PAGE HEADER — s fotografií oka na pozadí
+    ============================================ */
+    .page-header {
+      background: var(--green-deep);
+      padding: 64px 24px 56px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Dekorativní kruh připomínající duhovku — čistě CSS */
+    .page-header::before {
+      content: '';
+      position: absolute;
+      right: -80px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 420px;
+      height: 420px;
+      border-radius: 50%;
+      border: 1px solid rgba(200, 219, 168, 0.15);
+    }
+    .page-header::after {
+      content: '';
+      position: absolute;
+      right: -20px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      border: 1px solid rgba(200, 219, 168, 0.08);
+    }
+
+    .page-header-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .breadcrumb {
+      display: flex; gap: 8px; align-items: center;
+      font-size: 12px; color: rgba(255,255,255,0.4); margin-bottom: 20px;
+    }
+    .breadcrumb a { color: var(--green-mid); transition: color 0.2s; }
+    .breadcrumb a:hover { color: #fff; }
+
+    .page-title {
+      font-family: var(--font-serif);
+      font-size: clamp(40px, 6vw, 64px);
+      font-weight: 300;
+      line-height: 1.1;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+
+    .page-title-sub {
+      font-family: var(--font-serif);
+      font-size: clamp(16px, 2vw, 22px);
+      font-style: italic;
+      font-weight: 300;
+      color: var(--green-mid);
+      margin-bottom: 24px;
+    }
+
+    .page-lead {
+      font-size: 16px;
+      color: rgba(255,255,255,0.65);
+      max-width: 580px;
+      line-height: 1.8;
+    }
+
+    /* ============================================
+       RYCHLÁ NAVIGACE PO STRÁNCE
+       Kotvy — kliknutím přejdeš na danou sekci
+    ============================================ */
+    .page-nav {
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 64px; /* přesně pod hlavní navigací */
+      z-index: 90;
+    }
+
+    .page-nav-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      gap: 0;
+      overflow-x: auto; /* na mobilu lze scrollovat horizontálně */
+    }
+
+    .page-nav a {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--text-light);
+      padding: 14px 20px;
+      border-bottom: 2px solid transparent;
+      white-space: nowrap;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .page-nav a:hover {
+      color: var(--green-dark);
+      border-bottom-color: var(--green-accent);
+    }
+
+    /* ============================================
+       SEKCE — základní styly
+    ============================================ */
+    .section { padding: var(--section-padding); }
+    .section-inner { max-width: var(--max-width); margin: 0 auto; }
+    .section-eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--green-dark); margin-bottom: 12px; }
+    .section-title { font-family: var(--font-serif); font-size: clamp(26px, 3.5vw, 40px); font-weight: 300; line-height: 1.2; color: var(--text-dark); margin-bottom: 20px; }
+
+    /* ============================================
+       SEKCE: CO JE IRIDOLOGIE
+       Dvousloupcový layout: text vlevo, SVG mapa vpravo
+    ============================================ */
+    .what-is {
+      background: #fff;
+    }
+
+    .what-is-grid {
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 64px;
+      align-items: start;
+    }
+
+    .what-is-text p {
+      font-size: 15px;
+      color: var(--text-mid);
+      line-height: 1.8;
+      margin-bottom: 18px;
+    }
+
+    /* Citát — zvýrazněný blok s levým okrajem */
+    .pullquote {
+      border-left: 3px solid var(--gold);
+      padding: 16px 0 16px 24px;
+      margin: 28px 0;
+    }
+
+    .pullquote p {
+      font-family: var(--font-serif);
+      font-size: 20px;
+      font-style: italic;
+      font-weight: 300;
+      color: var(--text-dark);
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    /* Obal pro SVG mapu duhovky s popiskem */
+    .iris-map-wrap {
+      position: sticky;
+      top: 120px; /* přilepí se při scrollování */
+    }
+
+    .iris-map-caption {
+      margin-top: 16px;
+      font-size: 12px;
+      color: var(--text-light);
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    /* ============================================
+       SEKCE: HISTORIE — časová osa
+    ============================================ */
+    .history {
+      background: var(--cream);
+    }
+
+    /* Vertikální časová osa */
+    .timeline {
+      position: relative;
+      margin-top: 48px;
+      padding-left: 32px;
+    }
+
+    /* Svislá čára osy */
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 8px;
+      bottom: 8px;
+      width: 1px;
+      background: var(--green-mid);
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 40px;
+      padding-left: 24px;
+    }
+
+    .timeline-item:last-child { margin-bottom: 0; }
+
+    /* Kolečko na ose — "tečka" pro každou událost */
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -38px;
+      top: 6px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--green-accent);
+      border: 2px solid #fff;
+      box-shadow: 0 0 0 1px var(--green-mid);
+    }
+
+    .timeline-date {
+      font-family: var(--font-serif);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--gold);
+      letter-spacing: 0.05em;
+      margin-bottom: 4px;
+    }
+
+    .timeline-title {
+      font-family: var(--font-serif);
+      font-size: 19px;
+      font-weight: 400;
+      color: var(--text-dark);
+      margin-bottom: 6px;
+    }
+
+    .timeline-text {
+      font-size: 14px;
+      color: var(--text-mid);
+      line-height: 1.65;
+    }
+
+    /* ============================================
+       SEKCE: MAPA DUHOVKY — jak se číst
+       Fotografie s popisky pomocí absolutně
+       pozicionovaných štítků
+    ============================================ */
+    .iris-zones {
+      background: var(--green-deep);
+      color: #fff;
+    }
+
+    .iris-zones .section-eyebrow { color: var(--green-mid); }
+    .iris-zones .section-title { color: #fff; }
+
+    .zones-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      margin-top: 40px;
+      align-items: start;
+    }
+
+    /* Obrázek oka s kruhovými zónami (SVG) */
+    .iris-diagram-wrap {
+      position: relative;
+    }
+
+    /* Seznam zón vpravo */
+    .zones-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .zone-item {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .zone-number {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(200, 219, 168, 0.15);
+      border: 1px solid rgba(200, 219, 168, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--green-mid);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .zone-title {
+      font-family: var(--font-serif);
+      font-size: 17px;
+      color: #fff;
+      margin-bottom: 3px;
+    }
+
+    .zone-text {
+      font-size: 13px;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.6;
+    }
+
+    /* ============================================
+       SEKCE: VÝUKA VE SVĚTĚ — kde se iridologie vyučuje
+    ============================================ */
+    .worldwide {
+      background: #fff;
+    }
+
+    .countries-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 40px;
+    }
+
+    .country-card {
+      background: var(--cream);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .country-flag {
+      font-size: 28px;
+      margin-bottom: 8px;
+      line-height: 1;
+    }
+
+    .country-name {
+      font-family: var(--font-serif);
+      font-size: 17px;
+      font-weight: 400;
+      color: var(--text-dark);
+      margin-bottom: 4px;
+    }
+
+    .country-note {
+      font-size: 12px;
+      color: var(--text-light);
+      line-height: 1.4;
+    }
+
+    /* Důležitá poznámka o vědeckém statusu */
+    .note-box {
+      background: var(--gold-light);
+      border: 1px solid #f0e0b8;
+      border-left: 3px solid var(--gold);
+      border-radius: 0 6px 6px 0;
+      padding: 20px 24px;
+      margin-top: 40px;
+    }
+
+    .note-box p {
+      font-size: 14px;
+      color: var(--text-mid);
+      line-height: 1.7;
+    }
+
+    .note-box strong {
+      color: var(--text-dark);
+      font-weight: 500;
+    }
+
+    /* ============================================
+       SEKCE: JAK PROBÍHÁ KONZULTACE
+    ============================================ */
+    .process {
+      background: var(--green-light);
+    }
+
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 24px;
+      margin-top: 40px;
+    }
+
+    .process-step {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .process-step-num {
+      font-family: var(--font-serif);
+      font-size: 36px;
+      font-weight: 300;
+      color: var(--green-mid);
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+
+    .process-step-title {
+      font-family: var(--font-serif);
+      font-size: 18px;
+      color: var(--text-dark);
+      margin-bottom: 8px;
+    }
+
+    .process-step-text {
+      font-size: 13px;
+      color: var(--text-mid);
+      line-height: 1.65;
+    }
+
+    /* ============================================
+       SEKCE: FAQ — nejčastější otázky
+       Akordeon — kliknutím se rozbalí odpověď
+    ============================================ */
+    .faq {
+      background: #fff;
+    }
+
+    .faq-list {
+      margin-top: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .faq-item {
+      border-bottom: 1px solid var(--border);
+    }
+
+    .faq-item:last-child { border-bottom: none; }
+
+    /* Tlačítko otázky — kliknutí otevře/zavře odpověď */
+    .faq-question {
+      width: 100%;
+      background: none;
+      border: none;
+      text-align: left;
+      padding: 20px 24px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      font-family: var(--font-serif);
+      font-size: 18px;
+      font-weight: 400;
+      color: var(--text-dark);
+      transition: background 0.2s;
+    }
+
+    .faq-question:hover { background: var(--green-light); }
+
+    /* Ikona + / × */
+    .faq-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--green-light);
+      border: 1px solid var(--green-mid);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 16px;
+      color: var(--green-dark);
+      transition: transform 0.3s, background 0.2s;
+      line-height: 1;
+    }
+
+    /* Když je otázka otevřená, otočíme ikonu */
+    .faq-item.open .faq-icon {
+      transform: rotate(45deg);
+      background: var(--green-dark);
+      color: #fff;
+      border-color: var(--green-dark);
+    }
+
+    /* Skrytá odpověď — height: 0 a overflow: hidden pro animaci */
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease;
+    }
+
+    /* Otevřená odpověď */
+    .faq-item.open .faq-answer {
+      max-height: 400px;
+    }
+
+    .faq-answer-inner {
+      padding: 0 24px 24px;
+      font-size: 15px;
+      color: var(--text-mid);
+      line-height: 1.75;
+    }
+
+    /* ============================================
+       CTA sekce a footer — stejné jako na ostatních stránkách
+    ============================================ */
+    .cta-section {
+      background: var(--green-deep);
+      text-align: center;
+      padding: 72px 24px;
+    }
+
+    .cta-title {
+      font-family: var(--font-serif);
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 300;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+
+    .cta-lead {
+      font-size: 16px;
+      color: rgba(255,255,255,0.6);
+      max-width: 480px;
+      margin: 0 auto 32px;
+      line-height: 1.75;
+    }
+
+    .cta-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+    .btn {
+      display: inline-block;
+      font-family: var(--font-sans);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 13px 28px;
+      border-radius: 4px;
+      border: 1.5px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-primary { background: var(--green-accent); color: #fff; border-color: var(--green-accent); }
+    .btn-primary:hover { background: var(--green-dark); border-color: var(--green-dark); }
+    .btn-outline-light { background: transparent; color: var(--green-mid); border-color: var(--green-mid); }
+    .btn-outline-light:hover { background: rgba(200, 219, 168, 0.1); }
+
+    .footer {
+      background: var(--green-deep);
+      color: rgba(255,255,255,0.6);
+      padding: 48px 24px;
+      border-top: 1px solid rgba(255,255,255,0.07);
+    }
+    .footer-inner { max-width: var(--max-width); margin: 0 auto; display: grid; grid-template-columns: 1fr auto; gap: 32px; align-items: start; }
+    .footer-logo { font-family: var(--font-serif); font-size: 20px; color: #fff; margin-bottom: 8px; }
+    .footer-logo span { font-style: italic; color: var(--green-mid); }
+    .footer-tagline { font-size: 13px; color: rgba(255,255,255,0.5); margin-bottom: 16px; }
+    .footer-contact a { display: block; font-size: 13px; color: var(--green-mid); margin-bottom: 4px; transition: color 0.2s; }
+    .footer-contact a:hover { color: #fff; }
+    .footer-links { display: flex; flex-direction: column; gap: 8px; text-align: right; }
+    .footer-links a { font-size: 12px; color: rgba(255,255,255,0.5); transition: color 0.2s; letter-spacing: 0.05em; }
+    .footer-links a:hover { color: var(--green-mid); }
+    .footer-bottom { max-width: var(--max-width); margin: 32px auto 0; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; font-size: 11px; color: rgba(255,255,255,0.3); flex-wrap: wrap; gap: 8px; }
+
+    /* ============================================
+       RESPONZIVITA
+    ============================================ */
+    @media (max-width: 900px) {
+      :root { --section-padding: 60px 20px; }
+      .what-is-grid { grid-template-columns: 1fr; }
+      .iris-map-wrap { position: static; }
+      .zones-grid { grid-template-columns: 1fr; }
+      .footer-inner { grid-template-columns: 1fr; }
+      .footer-links { text-align: left; }
+    }
+
+    @media (max-width: 640px) {
+      :root { --section-padding: 48px 16px; }
+      .nav-links, .nav-cta { display: none; }
+      .nav-hamburger { display: flex; }
+      .page-nav { display: none; } /* Na úzkém mobilu schováme kotevní lištu */
+      .process-steps { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVIGACE -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">Monika <span>Novotná</span></a>
+      <ul class="nav-links">
+        <li><a href="index.html">O mně</a></li>
+        <li><a href="specializace.html">Specializace</a></li>
+        <li><a href="iridologie.html" class="active">Iridologie</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="reference.html">Reference</a></li>
+      </ul>
+      <a href="index.html#objednat" class="nav-cta">Objednat se</a>
+      <button class="nav-hamburger" id="hamburger" aria-label="Otevřít menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="nav-mobile" id="nav-mobile">
+      <a href="index.html">O mně</a>
+      <a href="specializace.html">Specializace</a>
+      <a href="iridologie.html">Iridologie</a>
+      <a href="blog.html">Blog</a>
+      <a href="reference.html">Reference</a>
+      <a href="index.html#objednat" style="color: var(--green-dark); font-weight: 500;">→ Objednat se</a>
+    </div>
+  </nav>
+
+
+  <!-- PAGE HEADER -->
+  <header class="page-header">
+    <div class="page-header-inner">
+      <nav class="breadcrumb" aria-label="Kde se nacházíte">
+        <a href="index.html">Domů</a>
+        <span>›</span>
+        <a href="specializace.html">Specializace</a>
+        <span>›</span>
+        <span style="color: rgba(255,255,255,0.5)">Iridologie</span>
+      </nav>
+      <h1 class="page-title">Iridologie</h1>
+      <p class="page-title-sub">Diagnostika z oční duhovky</p>
+      <p class="page-lead">
+        Duhovka oka je jako mapa — odráží genetickou výbavu, aktuální stav orgánů
+        i signály, které tělo vysílá dlouho předtím, než se obtíže projeví naplno.
+      </p>
+    </div>
+  </header>
+
+
+  <!-- KOTEVNÍ NAVIGACE PO STRÁNCE -->
+  <!-- Umožní návštěvníkovi přeskočit přímo na část, která ho zajímá -->
+  <div class="page-nav" role="navigation" aria-label="Sekce stránky">
+    <div class="page-nav-inner">
+      <a href="#co-je">Co je iridologie</a>
+      <a href="#historie">Historie</a>
+      <a href="#mapa-duhovky">Mapa duhovky</a>
+      <a href="#ve-svete">Ve světě</a>
+      <a href="#konzultace">Konzultace</a>
+      <a href="#faq">Otázky</a>
+    </div>
+  </div>
+
+
+  <!-- ============================================
+       CO JE IRIDOLOGIE
+  ============================================ -->
+  <section class="section what-is" id="co-je">
+    <div class="section-inner">
+      <div class="what-is-grid">
+
+        <div class="what-is-text">
+          <p class="section-eyebrow">Základ metody</p>
+          <h2 class="section-title">Co je iridologie?</h2>
+
+          <p>
+            Iridologie (také irisdiagnostika) je diagnostická metoda, která hodnotí zdravotní stav
+            člověka prostřednictvím pozorování oční duhovky, zorničky a bělma. Vychází z poznatku,
+            že oko je optickým nervem propojeno s mozkem — a skrze nervové a krevní propojení
+            se v duhovce zobrazuje stav orgánů a systémů celého těla.
+          </p>
+
+          <p>
+            Duhovka funguje jako zrcadlo dvou vrstev informací: <strong>genotypu</strong> — tedy genetické
+            výbavy, se kterou se člověk rodí — a <strong>fenotypu</strong> — tedy toho, jak konkrétní orgány
+            ovlivňuje způsob života, strava a prostředí v průběhu let.
+          </p>
+
+          <div class="pullquote">
+            <p>„V oku vidím, co člověk přinesl na svět a co si v průběhu života vybudoval — to je základ pro smysluplný terapeutický plán."</p>
+          </div>
+
+          <p>
+            Iridolog sleduje strukturu vláken duhovky, změny pigmentace, prohlubně a vyvýšeniny,
+            barvu bělma i tvar zorničky. Každá zóna na duhovkové mapě odpovídá konkrétní části těla.
+            Zkušený iridolog dokáže z těchto znaků odhadnout oslabení orgánů, genetické predispozice
+            i stresové zatížení — a to dříve, než se obtíže plně projeví.
+          </p>
+
+          <p>
+            Metoda je <strong>zcela bezbolestná a neinvazivní</strong> — nevyžaduje žádné odběry ani přístroje.
+            Ke kvalitnímu vyšetření postačí profesionální fotografický systém a dobré osvětlení.
+            Výsledný rozbor slouží jako výchozí bod pro sestavení individuálního terapeutického plánu.
+          </p>
+        </div>
+
+        <!-- SVG diagram duhovky — schematická mapa zón -->
+        <div class="iris-map-wrap">
+          <!--
+            OBRÁZEK: Zde by bylo ideální umístit skutečnou fotografii nebo odborný
+            diagram iridologické mapy. Pokud budete mít k dispozici obrázek
+            (např. iris_mapa.jpg), nahraďte SVG tímto kódem:
+
+            <img src="img/iris_mapa.jpg" alt="Iridologická mapa duhovky" style="border-radius: 50%; width: 100%;">
+
+            Níže je SVG náhrada — schematický diagram, který funguje bez fotografie.
+          -->
+          <svg viewBox="0 0 360 360" xmlns="http://www.w3.org/2000/svg" style="width:100%; border-radius: 50%; background: #0d1a08;">
+
+            <!-- Bělmo -->
+            <circle cx="180" cy="180" r="175" fill="#f0ede6" stroke="#ddd8ce" stroke-width="1"/>
+
+            <!-- Zóna 6: Lymfatická (okraj) -->
+            <circle cx="180" cy="180" r="155" fill="none" stroke="#4a7a2a" stroke-width="22" opacity="0.25"/>
+
+            <!-- Zóna 5: Svalová a kostrová -->
+            <circle cx="180" cy="180" r="133" fill="none" stroke="#3d6b22" stroke-width="20" opacity="0.35"/>
+
+            <!-- Zóna 4: Orgány -->
+            <circle cx="180" cy="180" r="113" fill="none" stroke="#2e5218" stroke-width="22" opacity="0.45"/>
+
+            <!-- Zóna 3: Neurová -->
+            <circle cx="180" cy="180" r="91" fill="none" stroke="#1e3a0f" stroke-width="18" opacity="0.6"/>
+
+            <!-- Zóna 2: Trávicí zóna -->
+            <circle cx="180" cy="180" r="73" fill="none" stroke="#152b0a" stroke-width="16" opacity="0.75"/>
+
+            <!-- Zóna 1: Autonomní nervový prstenec -->
+            <circle cx="180" cy="180" r="57" fill="#0d1a08" stroke="#6a9e45" stroke-width="1.5" opacity="0.9"/>
+
+            <!-- Zornice -->
+            <circle cx="180" cy="180" r="38" fill="#030804"/>
+
+            <!-- Radiální vlákna duhovky — naznačení struktury -->
+            <g stroke="#6a9e45" stroke-width="0.4" opacity="0.3">
+              <line x1="180" y1="142" x2="180" y2="25"/>
+              <line x1="180" y1="218" x2="180" y2="335"/>
+              <line x1="142" y1="180" x2="25" y2="180"/>
+              <line x1="218" y1="180" x2="335" y2="180"/>
+              <line x1="153" y1="153" x2="61" y2="61"/>
+              <line x1="207" y1="153" x2="299" y2="61"/>
+              <line x1="153" y1="207" x2="61" y2="299"/>
+              <line x1="207" y1="207" x2="299" y2="299"/>
+              <line x1="163" y1="145" x2="99" y2="38"/>
+              <line x1="197" y1="145" x2="261" y2="38"/>
+              <line x1="145" y1="163" x2="38" y2="99"/>
+              <line x1="215" y1="163" x2="322" y2="99"/>
+              <line x1="145" y1="197" x2="38" y2="261"/>
+              <line x1="215" y1="197" x2="322" y2="261"/>
+              <line x1="163" y1="215" x2="99" y2="322"/>
+              <line x1="197" y1="215" x2="261" y2="322"/>
+            </g>
+
+            <!-- Zlatý odlesk -->
+            <ellipse cx="155" cy="152" rx="18" ry="12" fill="white" opacity="0.06" transform="rotate(-30 155 152)"/>
+
+            <!-- Popisky zón -->
+            <text x="180" y="18" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="#00000" opacity="0.8">Lymfatická zóna</text>
+            <text x="350" y="135" text-anchor="end" font-family="Georgia, serif" font-size="9" fill="#00000" opacity="0.7">Svalová zóna</text>
+            <text x="350" y="185" text-anchor="end" font-family="Georgia, serif" font-size="9" fill="#00000" opacity="0.7">Orgánová zóna</text>
+            <text x="350" y="235" text-anchor="end" font-family="Georgia, serif" font-size="9" fill="#00000" opacity="0.6">Neurová zóna</text>
+            <text x="180" y="346" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="#00000" opacity="0.7">Trávicí zóna</text>
+          </svg>
+          <p class="iris-map-caption">
+            Schematické znázornění zón iridologické mapy.<br>
+            Každý okruh odpovídá jiné vrstvě orgánů a systémů v těle.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================
+       HISTORIE
+  ============================================ -->
+  <section class="section history" id="historie">
+    <div class="section-inner">
+      <p class="section-eyebrow">Kořeny metody</p>
+      <h2 class="section-title">Tisíce let sledování duhovky</h2>
+      <p style="font-size:15px; color:var(--text-mid); max-width:620px; line-height:1.8;">
+        Iridologie není výmyslem moderní doby. Sledování oka jako zrcadla zdraví má doložené
+        kořeny sahající hluboko do starověku — napříč kulturami a kontinenty.
+      </p>
+
+      <div class="timeline">
+
+        <div class="timeline-item">
+          <div class="timeline-date">Starověk — Starověký Egypt, Čína, Indie</div>
+          <h3 class="timeline-title">První písemné doklady</h3>
+          <p class="timeline-text">
+            Nejstarší záznamy pocházejí ze starověkého Egypta. V Gíze byly nalezeny papyry
+            připisované lékaři a knězi faraona Tutanchamona El Aksovi (kolem roku 1349 př. n. l.),
+            které popisují vztah oka ke stavu těla. Metoda se následně rozšířila do Babylonu,
+            Tibetu a Indočíny. V Malé Asii byla nalezena kamenná deska s vyobrazením duhovky
+            a jejích vztahů k orgánům. Před více než 3 000 lety ji využívali lékaři v Indii a Číně.
+          </p>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">1665–1670 — Evropa</div>
+          <h3 class="timeline-title">První evropský popis — Philip Meyeus</h3>
+          <p class="timeline-text">
+            Německý lékař Philippus Meyeus (Philip Meyen von Coburg) jako první v Evropě písemně
+            popsal principy diagnostiky z duhovky. Jeho dílo <em>Chiromatica Medica</em> (1665, přetištěno
+            1670 a 1691) obsahuje první systematický popis znaků duhovky a jejich vztahu k orgánům.
+            Orgánové rozčlenění duhovky podle částí těla dále rozvinul německý lékař Georg Joseph Beer
+            ve své knize z roku 1813.
+          </p>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">1861–1880 — Budapešť</div>
+          <h3 class="timeline-title">Ignác von Péczely — otec moderní iridologie</h3>
+          <p class="timeline-text">
+            Maďarský lékař Dr. Ignác von Péczely (1823–1911) je považován za zakladatele moderní
+            iridologie. Jako lékař systematicky sledoval změny v duhovkách svých pacientů
+            a v roce 1880 sestavil první orgánovou topografii oka — základ první moderní iridologické
+            mapy. Jeho práce položila vědecké základy pro rozvoj metody v 19. a 20. století.
+          </p>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">Počátek 20. století — Německo</div>
+          <h3 class="timeline-title">Pastor Emanuel Felke a Felkeho institut</h3>
+          <p class="timeline-text">
+            Německý pastor Emanuel Felke rozvinul iridologické metody o nové znaky a popisy.
+            Přestože čelil kritice, jeho práce přinesla iridologii do širšího povědomí.
+            V Gerlingenu v Německu byl založen Felkeho institut — jedno z prvních výzkumných
+            a vzdělávacích center iridologie, které působí dodnes.
+          </p>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">1950 — USA a mezinárodní rozšíření</div>
+          <h3 class="timeline-title">Bernard Jensen a vznik mezinárodní společnosti</h3>
+          <p class="timeline-text">
+            Americký chiropraktik Bernard Jensen přinesl iridologii do Spojených států, kde začal
+            vyučovat vlastní metodu a zdůrazňoval roli toxinů a přirozené stravy. V roce 1951 byla
+            z jeho iniciativy založena Mezinárodní iridologická společnost. Od roku 1978 vychází
+            v USA pravidelně odborný časopis <em>International Iridologist</em>. Dnes se iridologie
+            vyučuje na školách přírodní medicíny v USA, Kanadě, Austrálii i v Německu.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================
+       MAPA DUHOVKY — zóny a co odhalují
+  ============================================ -->
+  <section class="section iris-zones" id="mapa-duhovky">
+    <div class="section-inner">
+      <p class="section-eyebrow">Jak se čte duhovka</p>
+      <h2 class="section-title">Mapa duhovky — zóny a jejich význam</h2>
+
+      <div class="zones-grid">
+
+        <!-- Fotografický placeholder -->
+        <div class="iris-diagram-wrap">
+          <!--
+            OBRÁZEK DUHOVKY:
+            Zde by bylo ideální umístit reálnou fotografii duhovky
+            s vyznačenými zónami. Pokud máte k dispozici fotografii,
+            použijte: <img src="img/duhovka_zony.jpg" alt="Mapa zón duhovky"
+            style="width:100%; border-radius:8px;">
+          -->
+          <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(200,219,168,0.2); border-radius: 8px; padding: 32px; text-align: center;">
+            <svg viewBox="0 0 300 300" style="width: 220px; height: 220px; margin: 0 auto 16px;">
+              <circle cx="150" cy="150" r="145" fill="#f0ede6" opacity="0.05" stroke="#c8dba8" stroke-width="0.5"/>
+              <circle cx="150" cy="150" r="128" fill="none" stroke="#4a7a2a" stroke-width="18" opacity="0.3"/>
+              <circle cx="150" cy="150" r="110" fill="none" stroke="#3d6b22" stroke-width="18" opacity="0.4"/>
+              <circle cx="150" cy="150" r="92" fill="none" stroke="#2e5218" stroke-width="20" opacity="0.5"/>
+              <circle cx="150" cy="150" r="72" fill="none" stroke="#1e3a0f" stroke-width="16" opacity="0.65"/>
+              <circle cx="150" cy="150" r="56" fill="none" stroke="#152b0a" stroke-width="14" opacity="0.8"/>
+              <circle cx="150" cy="150" r="42" fill="#0d1a08" stroke="#6a9e45" stroke-width="1.5"/>
+              <circle cx="150" cy="150" r="26" fill="#020603"/>
+              <!-- Zónová čísla -->
+              <text x="150" y="10" text-anchor="middle" font-size="10" fill="#c8dba8" opacity="0.7">6</text>
+              <text x="150" y="27" text-anchor="middle" font-size="10" fill="#c8dba8" opacity="0.7">5</text>
+              <text x="150" y="44" text-anchor="middle" font-size="10" fill="#c8dba8" opacity="0.6">4</text>
+              <text x="150" y="63" text-anchor="middle" font-size="10" fill="#c8dba8" opacity="0.6">3</text>
+              <text x="150" y="80" text-anchor="middle" font-size="10" fill="#c8dba8" opacity="0.5">2</text>
+              <text x="150" y="97" text-anchor="middle" font-size="10" fill="#c8dba8" opacity="0.5">1</text>
+            </svg>
+            <p style="font-size:12px; color: rgba(200,219,168,0.5);">
+              Schematické rozložení 6 hlavních zón duhovky od zornice k okraji
+            </p>
+          </div>
+        </div>
+
+        <!-- Popis zón -->
+        <div class="zones-list">
+          <div class="zone-item">
+            <div class="zone-number">1</div>
+            <div>
+              <div class="zone-title">Autonomní nervový prstenec</div>
+              <p class="zone-text">Bezprostřední okolí zornice. Odráží stav autonomního nervového systému a celkovou nervovou reaktivitu organismu.</p>
+            </div>
+          </div>
+          <div class="zone-item">
+            <div class="zone-number">2</div>
+            <div>
+              <div class="zone-title">Trávicí zóna (okružní zóna)</div>
+              <p class="zone-text">Střed duhovky kolem zornice — žaludek a střeva. Stav trávení je podle iridologie klíčovým ukazatelem celkového zdraví a genetických dispozic.</p>
+            </div>
+          </div>
+          <div class="zone-item">
+            <div class="zone-number">3</div>
+            <div>
+              <div class="zone-title">Neurová a humorální zóna</div>
+              <p class="zone-text">Zóna přenosu — nervové zásobení orgánů, propojení s hormonálním systémem a lymfatickými uzlinami.</p>
+            </div>
+          </div>
+          <div class="zone-item">
+            <div class="zone-number">4</div>
+            <div>
+              <div class="zone-title">Orgánová zóna</div>
+              <p class="zone-text">Zobrazení jednotlivých orgánů. Horní část duhovky odpovídá horní části těla, dolní dolní části. Pravé oko odráží pravou stranu těla.</p>
+            </div>
+          </div>
+          <div class="zone-item">
+            <div class="zone-number">5</div>
+            <div>
+              <div class="zone-title">Svalová a kostrová zóna</div>
+              <p class="zone-text">Pohybový aparát, svaly, kosti a klouby. Napovídá o konstituční síle a odolnosti pohybového systému.</p>
+            </div>
+          </div>
+          <div class="zone-item">
+            <div class="zone-number">6</div>
+            <div>
+              <div class="zone-title">Lymfatická a kožní zóna</div>
+              <p class="zone-text">Okraj duhovky — lymfatický systém, kůže a periferie. Odráží schopnost těla vypořádat se s odpadem a toxiny.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================
+       VE SVĚTĚ — kde se iridologie vyučuje
+  ============================================ -->
+  <section class="section worldwide" id="ve-svete">
+    <div class="section-inner">
+      <p class="section-eyebrow">Mezinárodní kontext</p>
+      <h2 class="section-title">Iridologie ve světě</h2>
+      <p style="font-size:15px; color:var(--text-mid); max-width:620px; line-height:1.8; margin-bottom: 8px;">
+        Iridologie se jako součást přírodní medicíny vyučuje na odborných školách
+        a fakultách přírodní medicíny v řadě zemí — nejčastěji jako doplňková
+        diagnostická disciplína v rámci naturopatie a holistické medicíny.
+      </p>
+
+      <div class="countries-grid">
+        <div class="country-card">
+          <div class="country-flag">🇩🇪</div>
+          <div class="country-name">Německo</div>
+          <p class="country-note">Felkeho institut v Gerlingenu, výuka na školách přírodní medicíny. Dlouhá tradice sahající do počátku 20. století.</p>
+        </div>
+        <div class="country-card">
+          <div class="country-flag">🇺🇸</div>
+          <div class="country-name">USA</div>
+          <p class="country-note">Mezinárodní iridologická společnost (zal. 1951). Výuka na naturopatických školách, odborný časopis International Iridologist.</p>
+        </div>
+        <div class="country-card">
+          <div class="country-flag">🇨🇦</div>
+          <div class="country-name">Kanada</div>
+          <p class="country-note">Součást naturopatického vzdělávání. Kanadská naturopatická asociace zahrnuje iridologii do osnov.</p>
+        </div>
+        <div class="country-card">
+          <div class="country-flag">🇦🇺</div>
+          <div class="country-name">Austrálie</div>
+          <p class="country-note">Výuka na akreditovaných školách přírodní medicíny. Součást holistického zdravotnictví.</p>
+        </div>
+        <div class="country-card">
+          <div class="country-flag">🇨🇿</div>
+          <div class="country-name">Česká republika</div>
+          <p class="country-note">Výuka na Škole klinické naturopatie a dalších školách přírodní medicíny. Členové České naturopatické společnosti.</p>
+        </div>
+      </div>
+
+      <!-- Čestná poznámka o vědeckém statusu -->
+      <div class="note-box">
+        <p>
+          <strong>Poznámka k vědeckému statusu:</strong> Iridologie je považována za doplňkovou
+          diagnostickou metodu v rámci naturopatie a přírodní medicíny. Dosavadní vědecké studie
+          neprokázaly přímou korelaci mezi znaky duhovky a diagnózou konkrétních onemocnění ve smyslu
+          konvenční medicíny. Iridologický rozbor <strong>nenahrazuje lékařské vyšetření</strong>
+          a slouží jako doplňkový nástroj pro celostní pohled na zdraví — nikoli jako samostatná
+          diagnostická metoda pro určování diagnóz. Monika vždy doporučuje paralelní spolupráci
+          s ošetřujícím lékařem.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ============================================
+       JAK PROBÍHÁ KONZULTACE
+  ============================================ -->
+  <section class="section process" id="konzultace">
+    <div class="section-inner">
+      <p class="section-eyebrow">Praktické informace</p>
+      <h2 class="section-title">Jak probíhá iridologická konzultace</h2>
+      <p style="font-size:15px; color:var(--text-mid); max-width:560px; line-height:1.8; margin-bottom: 8px;">
+        Celé vyšetření je bezbolestné a neinvazivní. Zabere zpravidla 2 hodiny
+        a je součástí prvního diagnostického setkání.
+      </p>
+
+      <div class="process-steps">
+        <div class="process-step">
+          <div class="process-step-num">01</div>
+          <h3 class="process-step-title">Fotografování duhovky</h3>
+          <p class="process-step-text">
+            Pořídím digitální snímky obou očí profesionálním iridologickým systémem.
+            Snímky jsou uloženy pro případné pozdější srovnání vývoje.
+          </p>
+        </div>
+        <div class="process-step">
+          <div class="process-step-num">02</div>
+          <h3 class="process-step-title">Rozbor duhovky</h3>
+          <p class="process-step-text">
+            Detailní analýza snímků — čtení struktury vláken, pigmentace, přítomnosti
+            lagun, prohlubní a dalších znaků v jednotlivých zónách duhovkové mapy.
+          </p>
+        </div>
+        <div class="process-step">
+          <div class="process-step-num">03</div>
+          <h3 class="process-step-title">Pohledová diagnostika</h3>
+          <p class="process-step-text">
+            Doplním rozbor o pohledovou diagnostiku (barva kůže, oči, nehet, jazyk)
+            a podrobný terapeutický dotazník o vašem zdravotním stavu a životním stylu.
+          </p>
+        </div>
+        <div class="process-step">
+          <div class="process-step-num">04</div>
+          <h3 class="process-step-title">Interpretace a doporučení</h3>
+          <p class="process-step-text">
+            Podrobné seznámení s výsledky — vysvětlím, co jsem v duhovce viděla,
+            co to může znamenat pro vaše zdraví a jaká doporučení z toho vyplývají.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================
+       FAQ
+  ============================================ -->
+  <section class="section faq" id="faq">
+    <div class="section-inner">
+      <p class="section-eyebrow">Časté otázky</p>
+      <h2 class="section-title">Na co se nejčastěji ptáte</h2>
+
+      <div class="faq-list">
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Je iridologie bolestivá nebo nepříjemná?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Ne. Iridologické vyšetření je zcela bezbolestné a neinvazivní. Pořídím jen fotografie
+              vašich očí za dobrého osvětlení — kontakt s okem není žádný, žádné kapky ani přístroje
+              zasunuté do oka. Celé vyšetření probíhá na dálku, příjemně a v klidu.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Může iridologie diagnostikovat konkrétní nemoci?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Iridologie nevydává diagnózy ve smyslu konvenční medicíny. Poskytuje celostní obraz
+              o predispozicích, oslabení orgánů a genetické výbavě. Slouží jako jeden z nástrojů
+              pro sestavení individuálního terapeutického plánu — vždy v kombinaci s dalšími
+              diagnostickými metodami a v doplnění k péči lékaře.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Jak dlouho trvá iridologické vyšetření?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              První konzultace, která zahrnuje kompletní iridologický rozbor, pohledovou diagnostiku
+              a terapeutický dotazník, trvá zpravidla 2 hodiny. Druhé setkání (vyhodnocení
+              a sestavení nutričního protokolu) trvá rovněž přibližně 2 hodiny.
+              Následné kontrolní konzultace jsou kratší — obvykle 60 minut.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Jak mám na konzultaci přijít připraven/a?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Přineste si veškeré dostupné lékařské zprávy a výsledky krevních testů,
+              pokud je máte. Připravte si přehled aktuálních obtíží, užívaných léků
+              a doplňků stravy. Kontaktní čočky prosím nechte doma nebo přineste pouzdro —
+              na fotografování duhovky je potřeba fotografovat bez čoček.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Pro koho je iridologie vhodná?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Iridologický rozbor je vhodný pro každého, kdo chce získat celostní obraz
+              o svém zdravotním stavu — ať už řeší konkrétní obtíže, nebo chce preventivně
+              porozumět svým predispozicím. Je bezpečný pro děti i dospělé. Nevhodný není
+              prakticky pro nikoho — jedinou výjimkou jsou lidé se závažným očním onemocněním,
+              kde je duhovka strukturálně poškozena.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Mění se duhovka v čase? Mohu přijít na kontrolu?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Základní struktura duhovky (genetická výbava) se nemění. Mění se však znaky,
+              které odrážejí aktuální stav orgánů — jejich oslabení nebo zotavení.
+              Proto je porovnání snímků s odstupem několika měsíců cenným nástrojem
+              pro sledování terapeutického pokroku. Fotografie z prvního vyšetření
+              si uchovávám pro pozdější srovnání.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div>
+      <p style="font-size:11px; font-weight:500; letter-spacing:0.12em; text-transform:uppercase; color:var(--green-mid); margin-bottom:12px;">Připravena vám pomoct</p>
+      <h2 class="cta-title">Zarezervujte si iridologický rozbor</h2>
+      <p class="cta-lead">
+        První konzultace trvá 2 hodiny a zahrnuje kompletní diagnostiku.
+        Ordinuji v Praze 5 a v Nymburku.
+      </p>
+      <div class="cta-actions">
+        <a href="index.html#objednat" class="btn btn-primary">Objednat se →</a>
+        <a href="specializace.html" class="btn btn-outline-light">Ostatní specializace</a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-logo">Monika <span>Novotná</span></div>
+        <p class="footer-tagline">Terapeutka klinické nutriční medicíny</p>
+        <div class="footer-contact">
+          <a href="mailto:monika@healthjam.cz">monika@healthjam.cz</a>
+          <a href="index.html">healthjam.cz/monikanovotna</a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <a href="specializace.html">Specializace</a>
+        <a href="iridologie.html">Iridologie</a>
+        <a href="blog.html">Blog</a>
+        <a href="reference.html">Reference</a>
+        <a href="newsletter.html">Newsletter</a>
+        <a href="gdpr.html">Ochrana osobních údajů</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Ing. Monika Novotná</span>
+      <a href="gdpr.html" style="color: rgba(255,255,255,0.3);">Ochrana osobních údajů</a>
+    </div>
+  </footer>
+
+
+  <script>
+    // Hamburger menu
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('nav-mobile');
+    hamburger.addEventListener('click', function() {
+      hamburger.classList.toggle('open');
+      mobileMenu.classList.toggle('open');
+    });
+    mobileMenu.querySelectorAll('a').forEach(function(link) {
+      link.addEventListener('click', function() {
+        hamburger.classList.remove('open');
+        mobileMenu.classList.remove('open');
+      });
+    });
+
+    // FAQ akordeon
+    // Po kliknutí na otázku se přidá/odebere třída "open"
+    // CSS pak animuje max-height pro plynulé rozbalení
+    function toggleFaq(btn) {
+      const item = btn.closest('.faq-item');
+      const isOpen = item.classList.contains('open');
+
+      // Nejdřív zavřeme všechny ostatní otázky
+      document.querySelectorAll('.faq-item.open').forEach(function(openItem) {
+        openItem.classList.remove('open');
+      });
+
+      // Pak otevřeme kliknutou — pokud nebyla otevřená
+      if (!isOpen) {
+        item.classList.add('open');
+      }
+    }
+  </script>
+
+</body>
+</html>

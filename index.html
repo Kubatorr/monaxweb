@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <!-- Tato řádka říká prohlížeči: "přizpůsob šířku obsahu velikosti obrazovky" — klíč pro responzivitu -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ing. Monika Novotná — Klinická nutriční medicína</title>
+
+  <!-- Načítáme písma z Google Fonts (zdarma, bez instalace) -->
+  <!-- Cormorant Garamond = elegantní serif pro nadpisy (podobný jako na webu Jaree Basgall) -->
+  <!-- Jost = čistý moderní sans-serif pro běžný text -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    /* ============================================
+       CSS PROMĚNNÉ — paleta barev a základní hodnoty
+       Toto je "centrální sklad" — změníš barvu zde,
+       změní se všude na webu automaticky.
+    ============================================ */
+    :root {
+      --green-light:   #f4f9f0;
+      --green-mid:     #c8dba8;
+      --green-accent:  #6a9e45;
+      --green-dark:    #3d6b22;
+      --green-deep:    #1c2316;
+      --gold:          #c9952a;
+      --gold-light:    #fdf3dc;
+      --cream:         #faf8f4;
+      --text-dark:     #1c2316;
+      --text-mid:      #4a5240;
+      --text-light:    #7a8470;
+      --border:        #ddd8ce;
+
+      --font-serif: 'Cormorant Garamond', Georgia, serif;
+      --font-sans:  'Jost', system-ui, sans-serif;
+
+      /* Maximální šířka obsahu — na velkých monitorech se text neroztáhne přes celou obrazovku */
+      --max-width: 1100px;
+      --section-padding: 80px 24px;
+    }
+
+    /* ============================================
+       RESET A ZÁKLAD
+       Prohlížeče mají různé výchozí styly — toto je smaže
+    ============================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; } /* Plynulé skrolování po stránce při kliknutí na odkaz */
+
+    body {
+      font-family: var(--font-sans);
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--text-dark);
+      background: var(--cream);
+    }
+
+    img { max-width: 100%; height: auto; display: block; }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ============================================
+       NAVIGACE
+    ============================================ */
+    .nav {
+      position: sticky; /* Navigace zůstane nahoře při skrolování */
+      top: 0;
+      z-index: 100;
+      background: rgba(250, 248, 244, 0.95);
+      /* backdrop-filter přidá lehký blur efekt za navigací */
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      font-family: var(--font-serif);
+      font-size: 20px;
+      font-weight: 400;
+      color: var(--text-dark);
+      letter-spacing: 0.01em;
+    }
+
+    .nav-logo span { color: var(--green-dark); font-style: italic; }
+
+    /* Desktopové menu — seznam odkazů */
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-mid);
+      transition: color 0.2s;
+      padding-bottom: 2px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--green-dark);
+      border-bottom-color: var(--green-accent);
+    }
+
+    /* Tlačítko pro objednání v navigaci */
+    .nav-cta {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #fff;
+      background: var(--green-dark);
+      padding: 9px 20px;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+
+    .nav-cta:hover { background: var(--green-accent); }
+
+    /* Hamburger tlačítko — zobrazí se jen na mobilu */
+    .nav-hamburger {
+      display: none; /* Skryté na desktopu */
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+      background: none;
+      border: none;
+    }
+
+    .nav-hamburger span {
+      display: block;
+      width: 24px;
+      height: 1.5px;
+      background: var(--text-dark);
+      transition: transform 0.3s, opacity 0.3s;
+    }
+
+    /* Animace hamburger → křížek */
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    /* Mobilní menu — panel co vyjede shora */
+    .nav-mobile {
+      display: none;
+      flex-direction: column;
+      background: var(--cream);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 24px 24px;
+      gap: 4px;
+    }
+
+    .nav-mobile.open { display: flex; }
+
+    .nav-mobile a {
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--text-mid);
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      letter-spacing: 0.05em;
+    }
+
+    .nav-mobile a:last-child { border-bottom: none; }
+    .nav-mobile a:hover { color: var(--green-dark); }
+
+    /* ============================================
+       HERO SEKCE — úvodní blok
+    ============================================ */
+    .hero {
+      background: var(--green-light);
+      border-bottom: 1px solid var(--green-mid);
+      padding: 72px 24px 64px;
+    }
+
+    .hero-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      /* Na desktopu: foto vlevo, text vpravo */
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+
+    .hero-photo-wrap {
+      position: relative;
+    }
+
+    .hero-photo {
+      width: 100%;
+      aspect-ratio: 3/4; /* Poměr stran fotografie */
+      object-fit: cover;
+      border-radius: 4px;
+      display: block;
+    }
+
+    /* Zlatý rámeček posunutý za fotku — dekorativní prvek */
+    .hero-photo-wrap::after {
+      content: '';
+      position: absolute;
+      inset: -10px -10px 10px 10px;
+      border: 1.5px solid var(--gold);
+      border-radius: 4px;
+      z-index: -1;
+    }
+
+    /* Placeholder pokud fotka ještě není — zobrazí se šedý obdélník */
+    .hero-photo-placeholder {
+      width: 100%;
+      aspect-ratio: 3/4;
+      background: var(--green-mid);
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: var(--green-dark);
+      font-size: 13px;
+    }
+
+    .hero-photo-placeholder svg {
+      width: 48px;
+      height: 48px;
+      opacity: 0.5;
+    }
+
+    .hero-eyebrow {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--green-dark);
+      margin-bottom: 12px;
+    }
+
+    .hero-name {
+      font-family: var(--font-serif);
+      font-size: clamp(36px, 5vw, 56px); /* clamp = minimální, flexibilní, maximální velikost */
+      font-weight: 300;
+      line-height: 1.1;
+      color: var(--text-dark);
+      margin-bottom: 8px;
+    }
+
+    .hero-title {
+      font-family: var(--font-serif);
+      font-size: clamp(16px, 2vw, 20px);
+      font-style: italic;
+      font-weight: 300;
+      color: var(--text-mid);
+      margin-bottom: 24px;
+    }
+
+    .hero-bio {
+      font-size: 15px;
+      color: var(--text-mid);
+      line-height: 1.75;
+      margin-bottom: 28px;
+      max-width: 500px;
+    }
+
+    /* Tagy s ordinacemi */
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 32px;
+    }
+
+    .tag {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      padding: 5px 12px;
+      border-radius: 20px;
+    }
+
+    .tag-green {
+      background: var(--green-mid);
+      color: var(--green-deep);
+    }
+
+    .tag-gold {
+      background: var(--gold-light);
+      color: var(--gold);
+      border: 1px solid #f0e0b8;
+    }
+
+    /* Tlačítka vedle sebe */
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    /* ============================================
+       TLAČÍTKA — tři varianty
+    ============================================ */
+    .btn {
+      display: inline-block;
+      font-family: var(--font-sans);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 13px 28px;
+      border-radius: 4px;
+      border: 1.5px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+
+    .btn-primary {
+      background: var(--green-dark);
+      color: #fff;
+      border-color: var(--green-dark);
+    }
+
+    .btn-primary:hover {
+      background: var(--green-accent);
+      border-color: var(--green-accent);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--green-dark);
+      border-color: var(--green-dark);
+    }
+
+    .btn-outline:hover {
+      background: var(--green-light);
+    }
+
+    /* ============================================
+       SPOLEČNÉ STYLY SEKCÍ
+    ============================================ */
+    .section { padding: var(--section-padding); }
+
+    .section-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+
+    .section-eyebrow {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--green-dark);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-family: var(--font-serif);
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 300;
+      line-height: 1.2;
+      color: var(--text-dark);
+      margin-bottom: 16px;
+    }
+
+    .section-lead {
+      font-size: 16px;
+      color: var(--text-mid);
+      max-width: 560px;
+      line-height: 1.75;
+    }
+
+    .section-header { margin-bottom: 48px; }
+
+    /* Jemná oddělovací linka mezi sekcemi */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ============================================
+       SEKCE: SPECIALIZACE — mřížka karet
+    ============================================ */
+    .services {
+      background: #fff;
+    }
+
+    /* CSS Grid — automaticky přizpůsobí počet sloupců šířce obrazovky */
+    /* auto-fit + minmax znamená: "dej každé kartě min. 240px, ale pokud je místo, udělej jich víc vedle sebe" */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 24px;
+    }
+
+    .service-card {
+      padding: 28px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--cream);
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .service-card:hover {
+      border-color: var(--green-accent);
+      transform: translateY(-2px); /* Lehké zvednutí při najetí myší */
+    }
+
+    .service-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--green-light);
+      border: 1px solid var(--green-mid);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    .service-icon svg { width: 20px; height: 20px; }
+
+    .service-title {
+      font-family: var(--font-serif);
+      font-size: 20px;
+      font-weight: 400;
+      color: var(--text-dark);
+      margin-bottom: 8px;
+    }
+
+    .service-text {
+      font-size: 14px;
+      color: var(--text-mid);
+      line-height: 1.65;
+    }
+
+    .service-link {
+      display: inline-block;
+      margin-top: 14px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--green-dark);
+      border-bottom: 1px solid var(--green-accent);
+      padding-bottom: 1px;
+      transition: color 0.2s;
+    }
+
+    .service-link:hover { color: var(--green-accent); }
+
+    /* ============================================
+       SEKCE: O MNĚ — delší bio s fotkou
+    ============================================ */
+    .about {
+      background: var(--cream);
+    }
+
+    .about-inner {
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 64px;
+      align-items: start;
+    }
+
+    .about-text p {
+      font-size: 15px;
+      color: var(--text-mid);
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+
+    .about-text p:first-of-type {
+      font-family: var(--font-serif);
+      font-size: 20px;
+      font-weight: 300;
+      color: var(--text-dark);
+      font-style: italic;
+    }
+
+    .about-photo {
+      width: 100%;
+      aspect-ratio: 4/5;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+
+    .about-photo-placeholder {
+      width: 100%;
+      aspect-ratio: 4/5;
+      background: var(--green-light);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-light);
+      font-size: 13px;
+    }
+
+    /* ============================================
+       SEKCE: CENÍK
+    ============================================ */
+    .pricing {
+      background: var(--green-deep);
+      color: #fff;
+    }
+
+    .pricing .section-eyebrow { color: var(--green-mid); }
+
+    .pricing .section-title { color: #fff; }
+
+    .pricing-card {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: flex-start;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 6px;
+      padding: 40px 48px;
+      gap: 8px;
+    }
+
+    .pricing-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--green-mid);
+    }
+
+    .pricing-amount {
+      font-family: var(--font-serif);
+      font-size: 64px;
+      font-weight: 300;
+      line-height: 1;
+      color: #fff;
+    }
+
+    .pricing-unit {
+      font-size: 14px;
+      color: rgba(255,255,255,0.6);
+    }
+
+    .pricing-note {
+      font-size: 13px;
+      color: rgba(255,255,255,0.5);
+      margin-top: 8px;
+    }
+
+    .pricing-inner {
+      display: flex;
+      gap: 48px;
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+
+    .pricing-text {
+      flex: 1;
+      min-width: 240px;
+    }
+
+    .pricing-text p {
+      font-size: 15px;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.75;
+      margin-bottom: 24px;
+    }
+
+    /* ============================================
+       SEKCE: OBJEDNÁVKA (Calendly)
+    ============================================ */
+    .booking {
+      background: var(--green-light);
+      text-align: center;
+    }
+
+    .booking .section-lead {
+      margin: 0 auto 40px;
+    }
+
+    /* Placeholder pro Calendly widget */
+    .calendly-placeholder {
+      max-width: 680px;
+      margin: 0 auto;
+      border: 2px dashed var(--green-mid);
+      border-radius: 8px;
+      padding: 48px 24px;
+      color: var(--text-light);
+      font-size: 14px;
+    }
+
+    .calendly-placeholder strong {
+      display: block;
+      font-family: var(--font-serif);
+      font-size: 18px;
+      color: var(--text-mid);
+      margin-bottom: 8px;
+    }
+
+    /* ============================================
+       SEKCE: ORDINACE (dvě lokace)
+    ============================================ */
+    .locations {
+      background: #fff;
+    }
+
+    .locations-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 32px;
+    }
+
+    .location-card {
+      padding: 32px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+    }
+
+    .location-name {
+      font-family: var(--font-serif);
+      font-size: 22px;
+      font-weight: 400;
+      margin-bottom: 4px;
+      color: var(--text-dark);
+    }
+
+    .location-detail {
+      font-size: 14px;
+      color: var(--text-mid);
+      margin-bottom: 4px;
+      line-height: 1.6;
+    }
+
+    .location-badge {
+      display: inline-block;
+      margin-top: 12px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+
+    /* ============================================
+       FOOTER
+    ============================================ */
+    .footer {
+      background: var(--green-deep);
+      color: rgba(255,255,255,0.6);
+      padding: 48px 24px;
+    }
+
+    .footer-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 32px;
+      align-items: start;
+    }
+
+    .footer-logo {
+      font-family: var(--font-serif);
+      font-size: 20px;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .footer-logo span { font-style: italic; color: var(--green-mid); }
+
+    .footer-tagline {
+      font-size: 13px;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 16px;
+    }
+
+    .footer-contact a {
+      display: block;
+      font-size: 13px;
+      color: var(--green-mid);
+      margin-bottom: 4px;
+      transition: color 0.2s;
+    }
+
+    .footer-contact a:hover { color: #fff; }
+
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      text-align: right;
+    }
+
+    .footer-links a {
+      font-size: 12px;
+      color: rgba(255,255,255,0.5);
+      transition: color 0.2s;
+      letter-spacing: 0.05em;
+    }
+
+    .footer-links a:hover { color: var(--green-mid); }
+
+    .footer-bottom {
+      max-width: var(--max-width);
+      margin: 32px auto 0;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: rgba(255,255,255,0.3);
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    /* ============================================
+       RESPONZIVITA — media queries
+       @media = "pokud je obrazovka užší než X px, použij tyto styly"
+       Tohle je ten správný přístup místo user-agent detekce!
+    ============================================ */
+
+    /* Tablet a menší (do 900px) */
+    @media (max-width: 900px) {
+      :root { --section-padding: 60px 20px; }
+
+      .hero-inner {
+        grid-template-columns: 1fr;  /* Foto a text pod sebou */
+        gap: 40px;
+      }
+
+      .hero-photo-wrap { max-width: 320px; margin: 0 auto; }
+
+      .hero-photo-wrap::after { display: none; } /* Schováme dekorativní rámeček */
+
+      .about-inner {
+        grid-template-columns: 1fr;  /* Foto pod textem */
+      }
+
+      .about-photo, .about-photo-placeholder {
+        max-width: 320px;
+        order: -1; /* Fotka se zobrazí před textem */
+      }
+
+      .footer-inner {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-links { text-align: left; }
+    }
+
+    /* Mobil (do 640px) */
+    @media (max-width: 640px) {
+      :root { --section-padding: 48px 16px; }
+
+      /* Schováme desktopové menu a tlačítko */
+      .nav-links, .nav-cta { display: none; }
+
+      /* Zobrazíme hamburger */
+      .nav-hamburger { display: flex; }
+
+      .hero { padding: 48px 16px 40px; }
+
+      .pricing-card { padding: 28px 24px; width: 100%; }
+
+      .pricing-amount { font-size: 48px; }
+
+      .pricing-inner { flex-direction: column; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ============================================
+       NAVIGACE
+  ============================================ -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">Monika <span>Novotná</span></a>
+
+      <!-- Desktopové menu -->
+      <ul class="nav-links">
+        <li><a href="index.html" class="active">O mně</a></li>
+        <li><a href="specializace.html">Specializace</a></li>
+        <li><a href="iridologie.html">Iridologie</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="reference.html">Reference</a></li>
+      </ul>
+
+      <!-- Tlačítko objednat v navigaci -->
+      <a href="#objednat" class="nav-cta">Objednat se</a>
+
+      <!-- Hamburger tlačítko (jen mobil) -->
+      <button class="nav-hamburger" id="hamburger" aria-label="Otevřít menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+
+    <!-- Mobilní rozbalovací menu -->
+    <div class="nav-mobile" id="nav-mobile">
+      <a href="index.html">O mně</a>
+      <a href="specializace.html">Specializace</a>
+      <a href="iridologie.html">Iridologie</a>
+      <a href="blog.html">Blog</a>
+      <a href="reference.html">Reference</a>
+      <a href="#objednat" style="color: var(--green-dark); font-weight: 500;">→ Objednat se</a>
+    </div>
+  </nav>
+
+
+  <!-- ============================================
+       HERO SEKCE
+  ============================================ -->
+  <section class="hero">
+    <div class="hero-inner">
+
+      <!-- FOTKA v hero sekci -->
+      <!-- Fotka je v podsložce img/ — ujisti se, že tam soubor skutečně leží -->
+      <div class="hero-photo-wrap">
+        <img src="img/monja_prace.png" alt="Ing. Monika Novotná" class="hero-photo">
+      </div>
+
+      <!-- TEXT -->
+      <div class="hero-text">
+        <p class="hero-eyebrow">Klinická nutriční medicína</p>
+
+        <h1 class="hero-name">Ing. Monika<br>Novotná</h1>
+
+        <p class="hero-title">Terapeutka · Iridoložka · Průvodkyně ke zdraví</p>
+
+        <p class="hero-bio">
+          Pomáhám lidem porozumět svému tělu — prostřednictvím iridologie, hormonální diagnostiky
+          a individuálně nastavené stravy. Přistupuji ke každému klientovi jako k jedinečnému celku,
+          ne jen souboru symptomů.
+        </p>
+
+        <div class="hero-tags">
+          <span class="tag tag-green">Praha 5 — čtvrtky a pátky</span>
+          <span class="tag tag-gold">Nymburk — po domluvě</span>
+        </div>
+
+        <div class="hero-actions">
+          <a href="#objednat" class="btn btn-primary">Objednat se →</a>
+          <a href="#o-mne" class="btn btn-outline">Více o mně</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ============================================
+       SPECIALIZACE — přehled služeb
+  ============================================ -->
+  <section class="section services" id="sluzby">
+    <div class="section-inner">
+      <div class="section-header">
+        <p class="section-eyebrow">Jakými oblastmi se zabývám</p>
+        <h2 class="section-title">S čím se na mě můžete obrátit</h2>
+        <p class="section-lead">
+          Níže jsou oblasti, na které se ve své praxi nejčastěji zaměřuji, ve kterých využívám primárně metodu iris diagnostiky
+ <p> — Každý z nás je individuální a tak vždy vycházíme z toho, co potřebujete právě vy.</p>
+        </p>
+      </div>
+
+      <div class="services-grid">
+
+        <!-- Karta 1: Iridologie -->
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="10" cy="10" r="7" stroke="#3d6b22" stroke-width="1.2"/>
+              <circle cx="10" cy="10" r="3" fill="#6a9e45" opacity="0.5"/>
+              <circle cx="10" cy="10" r="1.2" fill="#3d6b22"/>
+            </svg>
+          </div>
+          <h3 class="service-title">Nesoustředěnost, ADHD</h3>
+          <p class="service-text">
+            vhodnou stravou a jejími doplňky můžeme zmírnit příznaky nerovnováhy centrální nervové soustavy.
+          </p>
+          <a href="specializace.html" class="service-link">Více o specializacích →</a>
+        </div>
+
+        <!-- Karta 2: Hormony -->
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 16 C4 10, 10 4, 16 4" stroke="#3d6b22" stroke-width="1.2" stroke-linecap="round"/>
+              <path d="M4 12 C6 9, 11 7, 16 8" stroke="#6a9e45" stroke-width="1" stroke-linecap="round" opacity="0.6"/>
+              <circle cx="16" cy="4" r="1.5" fill="#3d6b22"/>
+            </svg>
+          </div>
+          <h3 class="service-title">Hormonální rovnováha</h3>
+          <p class="service-text">
+            Únava, přibývání na váze, poruchy nálad nebo spánku — za těmito příznaky
+            se často skrývá hormonální nerovnováha.
+          </p>
+          <a href="specializace.html" class="service-link">Více o specializacích →</a>
+        </div>
+
+        <!-- Karta 3: Strava -->
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 3 L10 17" stroke="#3d6b22" stroke-width="1.2" stroke-linecap="round"/>
+              <path d="M6 7 Q10 4 14 7" stroke="#6a9e45" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+              <path d="M5 11 Q10 8 15 11" stroke="#6a9e45" stroke-width="1" stroke-linecap="round" fill="none" opacity="0.6"/>
+            </svg>
+          </div>
+          <h3 class="service-title">Optimalizace stravy</h3>
+          <p class="service-text">
+            Sestavím jídelní plán šitý na míru vaší konstituci, zdravotnímu stavu
+            a každodennímu rytmu — bez dogmat a striktních diet.
+          </p>
+          <a href="specializace.html" class="service-link">Více o specializacích →</a>
+        </div>
+
+        <!-- Karta 4: Zažívání -->
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="10" cy="11" rx="5" ry="6" stroke="#3d6b22" stroke-width="1.2"/>
+              <path d="M7.5 8 Q10 6.5 12.5 8" stroke="#6a9e45" stroke-width="1" stroke-linecap="round" fill="none"/>
+            </svg>
+          </div>
+          <h3 class="service-title">Zažívací obtíže</h3>
+          <p class="service-text">
+            Nadýmání, reflux, dráždivý tračník nebo nepravidelná stolice —
+            hledáme příčinu, ne jen potlačujeme příznaky.
+          </p>
+          <a href="specializace.html" class="service-link">Více o specializacích →</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================
+       O MNĚ — delší bio
+  ============================================ -->
+  <section class="section about" id="o-mne">
+    <div class="section-inner">
+      <div class="about-inner">
+
+        <div class="about-text">
+          <p class="section-eyebrow">O mně</p>
+          <h2 class="section-title">Věřím, že tělo<br>má svou vlastní moudrost</h2>
+
+          <p>
+            Každý klient přichází s jedinečným příběhem. Mým úkolem není jen poradit,
+            co jíst nebo nejíst — ale pomoci vám porozumět signálům, které vaše tělo vysílá,
+            a najít cestu zpět k přirozené rovnováze.
+          </p>
+          <p>
+            Vystudovala jsem nutriční medicínu na Škole klinické naturopatie, kde v současné době vyučuji obor "Bylyny" a následně absolvovala specializaci v iridologii. Spolupracuji s DDM Stodůlky či Mětskou knihovnou v Kolíně, kde přednáším veřejnosti o tématech spojených s mou praxí.
+            Svou praxi jsem spojila s krásným prostorem centra Ecce Vita, kam za mnou můžete dorazit ve čtvrtek čí pátek. Po dohodě se můžeme potkat v SAWA Centru v Nymburce, ve kterém také pořádáme přednášky o zdravém stravování a tématech spojených s mou praxí.
+            Pracuji s klienty osobně i online.
+          </p>
+          <p>
+            Ráda kombinuji moderní poznatky nutriční vědy s holistickým pohledem na zdraví —
+            tělo, mysl a životní styl jako celek.
+          </p>
+
+          <div style="margin-top: 32px;">
+            <a href="#objednat" class="btn btn-primary">Objednat první konzultaci</a>
+          </div>
+        </div>
+
+        <!-- Druhá fotka — detail nebo portrét -->
+        <!-- DŮLEŽITÉ: Fotku ulož do podsložky img/ vedle souboru index.html -->
+        <!-- Správná struktura: Monja_Web/index.html a Monja_Web/img/monja_dovo.png -->
+        <div>
+          <img src="img/monja_dovo.png" alt="Ing. Monika Novotná" class="about-photo">
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================
+       CENÍK
+  ============================================ -->
+  <section class="section pricing">
+    <div class="section-inner">
+      <p class="section-eyebrow">Ceník</p>
+      <h2 class="section-title" style="color:#fff; margin-bottom: 40px;">Cena konzultace</h2>
+
+      <div class="pricing-inner">
+        <div class="pricing-card">
+          <span class="pricing-label">Individuální konzultace</span>
+          <span class="pricing-amount">1 400</span>
+          <span class="pricing-unit">Kč / hodina</span>
+          <span class="pricing-note">Osobně i online · Praha 5 nebo Nymburk</span>
+        </div>
+
+        <div class="pricing-text">
+          <p>
+            První konzultace trvá zpravidla 2 hodiny. Před prvním setkáním Vám zašlu <b>formulář, který je potřeba pečlivě vyplnit předtím, než se uvidíme.</b> Formulář je základním stavebním kamenem naší spolupráce, jelikož obsahuje celostní informace o vašich stravovacích návycích, aktuálních obtížích a dalších faktorech, které ovlivňují celkový zdravotní stav jak fyzické, tak psychické stránky každého z nás.
+          </p>
+          <a href="#objednat" class="btn btn-outline" style="border-color: var(--green-mid); color: var(--green-mid);">
+            Zarezervovat termín →
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================
+       OBJEDNÁVKA — Calendly
+  ============================================ -->
+  <section class="section booking" id="objednat">
+    <div class="section-inner">
+      <p class="section-eyebrow">Objednávka</p>
+      <h2 class="section-title">Zarezervujte si termín</h2>
+      <p class="section-lead">
+        Vyberte si čas, který vám vyhovuje. Po potvrzení obdržíte automatické připomenutí e-mailem.
+      </p>
+
+      <!--
+        CALENDLY EMBED:
+        Až budeš mít účet na Calendly, nahraď tento placeholder tímto kódem:
+
+        <div class="calendly-inline-widget"
+             data-url="https://calendly.com/TVŮJ-ÚČET"
+             style="min-width:320px;height:700px;">
+        </div>
+        <script src="https://assets.calendly.com/assets/external/widget.js"></script>
+      -->
+      <div class="calendly-placeholder">
+        <strong>Zde bude Calendly widget</strong>
+        Rezervační kalendář propojený s Google Kalendářem Moniky
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================
+       ORDINACE — dvě lokace
+  ============================================ -->
+  <section class="section locations" id="kontakt">
+    <div class="section-inner">
+      <div class="section-header">
+        <p class="section-eyebrow">Kde mě najdete</p>
+        <h2 class="section-title">Ordinace</h2>
+      </div>
+
+      <div class="locations-grid">
+
+        <div class="location-card">
+          <h3 class="location-name">Ecce Vita · Praha 5</h3>
+          <p class="location-detail">U Pernikářky 111/2a, Praha 5</p>
+          <p class="location-detail">Čtvrtky a pátky</p>
+          <span class="location-badge tag tag-green">Praha</span>
+        </div>
+
+        <div class="location-card">
+          <h3 class="location-name">SAWA Centrum · Nymburk</h3>
+          <p class="location-detail">Tyršova 172, Nymburk</p>
+          <p class="location-detail">Po individuální domluvě</p>
+          <span class="location-badge tag tag-gold">Nymburk</span>
+        </div>
+
+      </div>
+
+      <div style="margin-top: 32px;">
+        <p style="font-size:14px; color: var(--text-mid);">
+          E-mail:
+          <a href="/cdn-cgi/l/email-protection#610c0e0f080a00210904000d15090b000c4f021b" style="color: var(--green-dark); border-bottom: 1px solid var(--green-accent);">
+            <span class="__cf_email__" data-cfemail="aac7c5c4c3c1cbeac2cfcbc6dec2c0cbc784c9d0">[email&#160;protected]</span>
+          </a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================
+       FOOTER
+  ============================================ -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-logo">Monika <span>Novotná</span></div>
+        <p class="footer-tagline">Terapeutka klinické nutriční medicíny</p>
+        <div class="footer-contact">
+          <a href="/cdn-cgi/l/email-protection#721f1d1c1b1913321a17131e061a18131f5c1108"><span class="__cf_email__" data-cfemail="5835373631333918303d39342c30323935763b22">[email&#160;protected]</span></a>
+          <a href="index.html">healthjam.cz/monikanovotna</a>
+        </div>
+      </div>
+
+      <div class="footer-links">
+        <a href="specializace.html">Specializace</a>
+        <a href="iridologie.html">Iridologie</a>
+        <a href="blog.html">Blog</a>
+        <a href="reference.html">Reference</a>
+        <a href="newsletter.html">Newsletter</a>
+        <a href="gdpr.html">Ochrana osobních údajů</a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2025 Ing. Monika Novotná</span>
+      <a href="gdpr.html" style="color: rgba(255,255,255,0.3);">Ochrana osobních údajů</a>
+    </div>
+  </footer>
+
+
+  <!-- ============================================
+       JAVASCRIPT — hamburger menu
+       Toto je minimální JS — jen přidává/odebírá CSS třídu "open"
+  ============================================ -->
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('nav-mobile');
+
+    hamburger.addEventListener('click', function() {
+      // toggle = "přidej třídu, pokud ji nemá; odeber, pokud ji má"
+      hamburger.classList.tog

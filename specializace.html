@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Specializace — Ing. Monika Novotná</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    /* ============================================
+       CSS PROMĚNNÉ — stejné jako v index.html
+       Kdybys někdy chtěl změnit barvu celého webu,
+       stačí upravit jen tuto sekci v každém souboru.
+       (Později si ukážeme, jak to vyřešit jedním
+       sdíleným souborem style.css — bude to elegantnější.)
+    ============================================ */
+    :root {
+      --green-light:   #f4f9f0;
+      --green-mid:     #c8dba8;
+      --green-accent:  #6a9e45;
+      --green-dark:    #3d6b22;
+      --green-deep:    #1c2316;
+      --gold:          #c9952a;
+      --gold-light:    #fdf3dc;
+      --cream:         #faf8f4;
+      --text-dark:     #1c2316;
+      --text-mid:      #4a5240;
+      --text-light:    #7a8470;
+      --border:        #ddd8ce;
+      --font-serif: 'Cormorant Garamond', Georgia, serif;
+      --font-sans:  'Jost', system-ui, sans-serif;
+      --max-width: 1100px;
+      --section-padding: 80px 24px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-sans);
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--text-dark);
+      background: var(--cream);
+    }
+
+    img { max-width: 100%; height: auto; display: block; }
+    a { color: inherit; text-decoration: none; }
+
+    /* ============================================
+       NAVIGACE — zkopírovaná z index.html beze změny.
+       Na každé stránce webu bude stejná navigace.
+       Jediný rozdíl: třída "active" je teď na "Specializace".
+    ============================================ */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(250, 248, 244, 0.95);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo { font-family: var(--font-serif); font-size: 20px; font-weight: 400; color: var(--text-dark); }
+    .nav-logo span { color: var(--green-dark); font-style: italic; }
+
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+
+    .nav-links a {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-mid);
+      transition: color 0.2s;
+      padding-bottom: 2px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--green-dark);
+      border-bottom-color: var(--green-accent);
+    }
+
+    .nav-cta {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #fff;
+      background: var(--green-dark);
+      padding: 9px 20px;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+
+    .nav-cta:hover { background: var(--green-accent); }
+
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+      background: none;
+      border: none;
+    }
+
+    .nav-hamburger span {
+      display: block;
+      width: 24px;
+      height: 1.5px;
+      background: var(--text-dark);
+      transition: transform 0.3s, opacity 0.3s;
+    }
+
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    .nav-mobile {
+      display: none;
+      flex-direction: column;
+      background: var(--cream);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 24px 24px;
+      gap: 4px;
+    }
+
+    .nav-mobile.open { display: flex; }
+
+    .nav-mobile a {
+      font-size: 15px;
+      color: var(--text-mid);
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      letter-spacing: 0.05em;
+    }
+
+    .nav-mobile a:last-child { border-bottom: none; }
+    .nav-mobile a:hover { color: var(--green-dark); }
+
+    /* ============================================
+       PAGE HEADER — nadpis stránky (místo hero sekce)
+       Na podstránkách používáme jednodušší header
+       bez fotky — jen nadpis na barevném pozadí.
+    ============================================ */
+    .page-header {
+      background: var(--green-light);
+      border-bottom: 1px solid var(--green-mid);
+      padding: 56px 24px 48px;
+    }
+
+    .page-header-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+
+    /* Drobečková navigace = "kde se nacházím" — Domů > Specializace */
+    .breadcrumb {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 12px;
+      color: var(--text-light);
+      margin-bottom: 16px;
+    }
+
+    .breadcrumb a { color: var(--green-dark); transition: color 0.2s; }
+    .breadcrumb a:hover { color: var(--green-accent); }
+    .breadcrumb-sep { font-size: 10px; }
+
+    .page-title {
+      font-family: var(--font-serif);
+      font-size: clamp(36px, 5vw, 56px);
+      font-weight: 300;
+      line-height: 1.15;
+      color: var(--text-dark);
+      margin-bottom: 16px;
+    }
+
+    .page-lead {
+      font-size: 17px;
+      color: var(--text-mid);
+      max-width: 620px;
+      line-height: 1.75;
+    }
+
+    /* ============================================
+       SEKCE: CO JE KLINICKÁ NUTRIČNÍ MEDICÍNA
+    ============================================ */
+    .section { padding: var(--section-padding); }
+
+    .section-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+
+    .section-eyebrow {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--green-dark);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-family: var(--font-serif);
+      font-size: clamp(26px, 3.5vw, 38px);
+      font-weight: 300;
+      line-height: 1.2;
+      color: var(--text-dark);
+      margin-bottom: 20px;
+    }
+
+    /* Blok s popisem KNM — dva sloupce: text vlevo, fakta vpravo */
+    .intro-grid {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 56px;
+      align-items: start;
+    }
+
+    .intro-text p {
+      font-size: 15px;
+      color: var(--text-mid);
+      line-height: 1.8;
+      margin-bottom: 18px;
+    }
+
+    /* Postranní box s diagnostickými metodami */
+    .info-box {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--green-accent);
+      border-radius: 0 6px 6px 0;
+      padding: 28px;
+    }
+
+    .info-box-title {
+      font-family: var(--font-serif);
+      font-size: 18px;
+      font-weight: 400;
+      color: var(--text-dark);
+      margin-bottom: 16px;
+    }
+
+    /* Seznam s vlastními odrážkami ve tvaru tečky v barvě webu */
+    .styled-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .styled-list li {
+      font-size: 14px;
+      color: var(--text-mid);
+      padding-left: 18px;
+      position: relative;
+      line-height: 1.5;
+    }
+
+    /* Zelená tečka místo klasické odrážky */
+    .styled-list li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 7px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green-accent);
+    }
+
+    /* ============================================
+       SEKCE: SPECIALIZACE — hlavní mřížka karet
+    ============================================ */
+    .specializations {
+      background: #fff;
+    }
+
+    /* Filtrační lišta — kliknutím zobrazíš jen vybranou kategorii */
+    .filter-bar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+
+    .filter-btn {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      padding: 7px 16px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-mid);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-btn:hover { border-color: var(--green-accent); color: var(--green-dark); }
+
+    .filter-btn.active {
+      background: var(--green-dark);
+      border-color: var(--green-dark);
+      color: #fff;
+    }
+
+    /* Mřížka specializací */
+    .spec-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    /* Karta specializace */
+    .spec-card {
+      background: var(--cream);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 28px;
+      transition: border-color 0.2s, transform 0.2s;
+      /* data-category použijeme pro filtrování pomocí JS */
+    }
+
+    .spec-card:hover {
+      border-color: var(--green-accent);
+      transform: translateY(-2px);
+    }
+
+    /* Zvýrazněná karta pro iridologii — odkazuje na vlastní stránku */
+    .spec-card.featured {
+      border-color: var(--green-dark);
+      background: var(--green-light);
+    }
+
+    .spec-card-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .spec-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--green-light);
+      border: 1px solid var(--green-mid);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .spec-card.featured .spec-icon {
+      background: #fff;
+      border-color: var(--green-dark);
+    }
+
+    .spec-icon svg { width: 22px; height: 22px; }
+
+    .spec-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: 20px;
+      background: var(--gold-light);
+      color: var(--gold);
+      border: 1px solid #f0e0b8;
+      margin-bottom: 4px;
+    }
+
+    .spec-title {
+      font-family: var(--font-serif);
+      font-size: 21px;
+      font-weight: 400;
+      color: var(--text-dark);
+      line-height: 1.2;
+    }
+
+    .spec-text {
+      font-size: 14px;
+      color: var(--text-mid);
+      line-height: 1.65;
+      margin-bottom: 16px;
+    }
+
+    /* Příznaky/symptomy jako tagy pod popisem */
+    .spec-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    .spec-tag {
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      background: var(--green-light);
+      color: var(--green-dark);
+      border: 1px solid var(--green-mid);
+    }
+
+    .spec-link {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--green-dark);
+      border-bottom: 1px solid var(--green-accent);
+      padding-bottom: 1px;
+      transition: color 0.2s;
+    }
+
+    .spec-link:hover { color: var(--green-accent); }
+
+    /* ============================================
+       SEKCE: PRŮBĚH KONZULTACE — kroky
+    ============================================ */
+    .consultation {
+      background: var(--green-deep);
+      color: #fff;
+    }
+
+    .consultation .section-eyebrow { color: var(--green-mid); }
+    .consultation .section-title { color: #fff; }
+
+    /* Kroky jako číslovaná horizontální řada */
+    .steps {
+      display: grid;
+      /* Na desktopu 3 sloupce, na mobilu 1 */
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      margin-top: 48px;
+    }
+
+    .step {
+      position: relative;
+      padding-top: 8px;
+    }
+
+    /* Zlaté číslo kroku */
+    .step-number {
+      font-family: var(--font-serif);
+      font-size: 48px;
+      font-weight: 300;
+      line-height: 1;
+      color: var(--gold);
+      margin-bottom: 12px;
+      opacity: 0.8;
+    }
+
+    .step-title {
+      font-family: var(--font-serif);
+      font-size: 20px;
+      font-weight: 400;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+
+    .step-text {
+      font-size: 14px;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.7;
+    }
+
+    /* Dělicí čára mezi kroky (jen na desktopu) */
+    .step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      right: -16px;
+      top: 20px;
+      height: 60%;
+      width: 1px;
+      background: rgba(255,255,255,0.1);
+    }
+
+    /* ============================================
+       SEKCE: KVALIFIKACE A CERTIFIKÁTY
+    ============================================ */
+    .qualifications {
+      background: var(--cream);
+    }
+
+    .qual-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-top: 40px;
+    }
+
+    .qual-item {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      padding: 20px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+    }
+
+    /* Rok certifikátu jako zlatý štítek */
+    .qual-year {
+      font-family: var(--font-serif);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--gold);
+      background: var(--gold-light);
+      border: 1px solid #f0e0b8;
+      border-radius: 4px;
+      padding: 4px 8px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .qual-text {
+      font-size: 14px;
+      color: var(--text-mid);
+      line-height: 1.6;
+    }
+
+    .qual-text strong {
+      display: block;
+      font-weight: 500;
+      color: var(--text-dark);
+      margin-bottom: 2px;
+    }
+
+    /* ============================================
+       CTA SEKCE — výzva k akci na konci stránky
+    ============================================ */
+    .cta-section {
+      background: var(--green-light);
+      text-align: center;
+      padding: 72px 24px;
+      border-top: 1px solid var(--green-mid);
+    }
+
+    .cta-section .section-title { margin-bottom: 12px; }
+
+    .cta-section p {
+      font-size: 16px;
+      color: var(--text-mid);
+      max-width: 500px;
+      margin: 0 auto 32px;
+      line-height: 1.75;
+    }
+
+    .btn {
+      display: inline-block;
+      font-family: var(--font-sans);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 13px 28px;
+      border-radius: 4px;
+      border: 1.5px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-primary { background: var(--green-dark); color: #fff; border-color: var(--green-dark); }
+    .btn-primary:hover { background: var(--green-accent); border-color: var(--green-accent); }
+    .btn-outline { background: transparent; color: var(--green-dark); border-color: var(--green-dark); }
+    .btn-outline:hover { background: var(--green-light); }
+
+    .cta-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+    /* ============================================
+       FOOTER — stejný jako v index.html
+    ============================================ */
+    .footer {
+      background: var(--green-deep);
+      color: rgba(255,255,255,0.6);
+      padding: 48px 24px;
+    }
+
+    .footer-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 32px;
+      align-items: start;
+    }
+
+    .footer-logo { font-family: var(--font-serif); font-size: 20px; color: #fff; margin-bottom: 8px; }
+    .footer-logo span { font-style: italic; color: var(--green-mid); }
+    .footer-tagline { font-size: 13px; color: rgba(255,255,255,0.5); margin-bottom: 16px; }
+    .footer-contact a { display: block; font-size: 13px; color: var(--green-mid); margin-bottom: 4px; transition: color 0.2s; }
+    .footer-contact a:hover { color: #fff; }
+
+    .footer-links { display: flex; flex-direction: column; gap: 8px; text-align: right; }
+    .footer-links a { font-size: 12px; color: rgba(255,255,255,0.5); transition: color 0.2s; letter-spacing: 0.05em; }
+    .footer-links a:hover { color: var(--green-mid); }
+
+    .footer-bottom {
+      max-width: var(--max-width);
+      margin: 32px auto 0;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: rgba(255,255,255,0.3);
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    /* ============================================
+       RESPONZIVITA
+    ============================================ */
+    @media (max-width: 900px) {
+      :root { --section-padding: 60px 20px; }
+
+      .intro-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .steps {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+
+      /* Schováme dělicí čáry mezi kroky na mobilu */
+      .step::after { display: none; }
+
+      .qual-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-inner { grid-template-columns: 1fr; }
+      .footer-links { text-align: left; }
+    }
+
+    @media (max-width: 640px) {
+      :root { --section-padding: 48px 16px; }
+      .nav-links, .nav-cta { display: none; }
+      .nav-hamburger { display: flex; }
+
+      .spec-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ============================================
+       NAVIGACE — stejná na každé stránce
+       Změna oproti index.html: "active" je na Specializace
+  ============================================ -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">Monika <span>Novotná</span></a>
+
+      <ul class="nav-links">
+        <li><a href="index.html">O mně</a></li>
+        <li><a href="specializace.html" class="active">Specializace</a></li>
+        <li><a href="iridologie.html">Iridologie</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="reference.html">Reference</a></li>
+      </ul>
+
+      <a href="index.html#objednat" class="nav-cta">Objednat se</a>
+
+      <button class="nav-hamburger" id="hamburger" aria-label="Otevřít menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+    <div class="nav-mobile" id="nav-mobile">
+      <a href="index.html">O mně</a>
+      <a href="specializace.html">Specializace</a>
+      <a href="iridologie.html">Iridologie</a>
+      <a href="blog.html">Blog</a>
+      <a href="reference.html">Reference</a>
+      <a href="index.html#objednat" style="color: var(--green-dark); font-weight: 500;">→ Objednat se</a>
+    </div>
+  </nav>
+
+
+  <!-- ============================================
+       PAGE HEADER
+  ============================================ -->
+  <header class="page-header">
+    <div class="page-header-inner">
+      <!-- Drobečková navigace — orientace na webu -->
+      <nav class="breadcrumb" aria-label="Kde se nacházíte">
+        <a href="index.html">Domů</a>
+        <span class="breadcrumb-sep">›</span>
+        <span>Specializace</span>
+      </nav>
+
+      <h1 class="page-title">Oblasti mé práce</h1>
+      <p class="page-lead">
+        Klinická nutriční medicína mi umožňuje hledat příčiny — ne jen zmírňovat příznaky.
+        Každý klient dostane přístup šitý na míru jeho aktuálnímu stavu a potřebám.
+      </p>
+    </div>
+  </header>
+
+
+  <!-- ============================================
+       CO JE KLINICKÁ NUTRIČNÍ MEDICÍNA
+  ============================================ -->
+  <section class="section" style="background: #fff;">
+    <div class="section-inner">
+      <div class="intro-grid">
+
+        <div class="intro-text">
+          <p class="section-eyebrow">Základ mé práce</p>
+          <h2 class="section-title">Klinická nutriční medicína</h2>
+          <p>
+            Jedná se o celosvětově uznávanou léčebnou terapii, která se z pohledu efektivnosti
+            řadí hned za západní medicínu. Jejím cílem je hledání příčin nerovnováhy v těle
+            a následná obnova vnitřní harmonie.
+          </p>
+          <p>
+            Terapie využívá vztah mezi stravou, nutrienty (vitamíny, minerály, stopové prvky)
+            a životním stylem — pohybem, spánkem a prací se stresem — k obnově rovnováhy v těle.
+            Je velice efektivní v prevenci chronických a civilizačních chorob a vhodně doplňuje
+            odbornou lékařskou péči.
+          </p>
+          <p>
+            Pracuji s moderními diagnostickými metodami funkční medicíny i klasickými
+            vyšetřovacími postupy. Tam, kde je to potřeba, doporučuji laboratorní testy —
+            vždy však s ohledem na celkový obraz zdraví konkrétního klienta.
+          </p>
+        </div>
+
+        <!-- Postranní info box s diagnostikou -->
+        <aside class="info-box">
+          <h3 class="info-box-title">Diagnostické metody</h3>
+          <ul class="styled-list">
+            <li>Iridologie — rozbor oční duhovky a bělimy</li>
+            <li>Pohledová diagnostika a rozbor jazyka</li>
+            <li>Měření na bioimpedanční váze</li>
+            <li>Interpretace krevního obrazu a lékařských zpráv</li>
+            <li>Testy na potravinové intolerance a alergie</li>
+            <li>Testy hormonální nerovnováhy</li>
+            <li>Rozbor střevního mikrobiomu</li>
+            <li>Testy na zatížení těžkými kovy a parazity</li>
+          </ul>
+        </aside>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================
+       SPECIALIZACE — mřížka karet
+  ============================================ -->
+  <section class="section specializations" id="specializace">
+    <div class="section-inner">
+      <p class="section-eyebrow">Čím se zabývám</p>
+      <h2 class="section-title">Moje zaměření</h2>
+
+      <!-- Filtrační tlačítka -->
+      <!-- JavaScript níže zajistí skrývání a zobrazování karet podle kategorie -->
+      <div class="filter-bar">
+        <button class="filter-btn active" onclick="filterCards('all', this)">Vše</button>
+        <button class="filter-btn" onclick="filterCards('diagnostika', this)">Diagnostika</button>
+        <button class="filter-btn" onclick="filterCards('hormony', this)">Hormony & energie</button>
+        <button class="filter-btn" onclick="filterCards('traveni', this)">Trávení & strava</button>
+        <button class="filter-btn" onclick="filterCards('ostatni', this)">Ostatní</button>
+      </div>
+
+      <div class="spec-grid" id="spec-grid">
+
+        <!-- IRIDOLOGIE — zvýrazněná karta s odkazem na vlastní stránku -->
+        <div class="spec-card featured" data-category="diagnostika">
+          <div class="spec-card-header">
+            <div class="spec-icon">
+              <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="11" cy="11" r="8" stroke="#3d6b22" stroke-width="1.2"/>
+                <circle cx="11" cy="11" r="4" stroke="#6a9e45" stroke-width="1" opacity="0.7"/>
+                <circle cx="11" cy="11" r="1.5" fill="#3d6b22"/>
+                <line x1="11" y1="3" x2="11" y2="5" stroke="#6a9e45" stroke-width="0.8" opacity="0.5"/>
+                <line x1="11" y1="17" x2="11" y2="19" stroke="#6a9e45" stroke-width="0.8" opacity="0.5"/>
+                <line x1="3" y1="11" x2="5" y2="11" stroke="#6a9e45" stroke-width="0.8" opacity="0.5"/>
+                <line x1="17" y1="11" x2="19" y2="11" stroke="#6a9e45" stroke-width="0.8" opacity="0.5"/>
+              </svg>
+            </div>
+            <div>
+              <span class="spec-badge">Hloubková sekce</span>
+              <h3 class="spec-title">Iridologie</h3>
+            </div>
+          </div>
+          <p class="spec-text">
+            Detailní rozbor oční duhovky a bělimy. V oku se odráží jednak genetická výbava,
+            se kterou se člověk rodí (genotyp), a zároveň i to, jak stav jednotlivých orgánů
+            ovlivňuje člověk sám v průběhu života (fenotyp).
+          </p>
+          <div class="spec-tags">
+            <span class="spec-tag">Genetická výbava</span>
+            <span class="spec-tag">Stav orgánů</span>
+            <span class="spec-tag">Nervový systém</span>
+          </div>
+          <a href="iridologie.html" class="spec-link">Celá stránka o iridologii →</a>
+        </div>
+
+        <!-- HORMONÁLNÍ NEROVNOVÁHA -->
+        <div class="spec-card" data-category="hormony">
+          <div class="spec-card-header">
+            <div class="spec-icon">
+              <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 18 C4 11, 11 4, 18 4" stroke="#3d6b22" stroke-width="1.2" stroke-linecap="round"/>
+                <path d="M4 14 C7 10, 13 8, 18 9" stroke="#6a9e45" stroke-width="1" stroke-linecap="round" opacity="0.6"/>
+                <circle cx="18" cy="4" r="2" fill="#3d6b22"/>
+              </svg>
+            </div>
+            <h3 class="spec-title">Hormonální nerovnováha</h3>
+          </div>
+          <p class="spec-text">
+            Může zahrnovat přehnané stresové reakce těla, přetížení adrenálního systému,
+            nerovnováhu ženských nebo mužských hormonů, nebo problémy se štítnou žlázou.
+          </p>
+          <div class="spec-tags">
+            <span class="spec-tag">Štítná žláza</span>
+            <span class="spec-tag">Ženské hormony</span>
+            <span class="spec-tag">Adrenální stres</span>
+            <span class="spec-tag">Mužské hormony</span>
+          </div>
+        </div>
+
+        <!-- ZAŽÍVÁNÍ -->
+        <div class="spec-card" data-category="traveni">
+          <div class="spec-card-header">
+            <div class="spec-icon">
+              <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <ellipse cx="11" cy="13" rx="6" ry="7" stroke="#3d6b22" stroke-width="1.2"/>
+                <path d="M8 9.5 Q11 7.5 14 9.5" stroke="#6a9e45" stroke-width="1" stroke-linecap="round" fill="none"/>
+                <path d="M7 13 Q11 11 15 13" stroke="#6a9e45" stroke-width="0.8" stroke-linecap="round" fill="none" opacity="0.5"/>
+              </svg>
+            </div>
+            <h3 class="spec-title">Zažívací obtíže</h3>
+          </div>
+          <p class="spec-text">
+            Zahrnuje nadýmání, těžké trávení, bolesti žaludku, reflux, dráždivý tračník,
+            potravinové intolerance a alergie. Hledáme příčinu, ne jen potlačujeme příznaky.
+          </p>
+          <div class="spec-tags">
+            <span class="spec-tag">Nadýmání</span>
+            <span class="spec-tag">Reflux</span>
+            <span class="spec-tag">Intolerance</span>
+            <span class="spec-tag">Dráždivý tračník</span>
+          </div>
+        </div>
+
+        <!-- OPTIMÁLNÍ STRAVA -->
+        <div class="spec-card" data-category="traveni">
+          <div class="spec-card-header">
+            <div class="spec-icon">
+              <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M11 3 L11 19" stroke="#3d6b22" stroke-width="1.2" stroke-linecap="round"/>
+                <path d="M6 7.5 Q11 4.5 16 7.5" stroke="#6a9e45" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+                <path d="M5.5 12 Q11 9 16.5 12" stroke="#6a9e45" stroke-width="1" stroke-linecap="round" fill="none" opacity="0.6"/>
+                <path d="M6 16.5 Q11 14 16 16.5" stroke="#6a9e45" stroke-width="0.8" stroke-linecap="round" fill="none" opacity="0.35"/>
+              </svg>
+            </div>
+            <h3 class="spec-title">Optimální stravovací návyky</h3>
+          </div>
+          <p class="spec-text">
+            Podle aktuálního stavu klienta, obtíží a individuálních stravovacích potřeb
+            navrhnu úpravu jídelníčku a případné vhodné načasování jídel.
+            Bez dogmat a striktních zákazů.
+          </p>
+          <div class="spec-tags">
+            <span class="spec-tag">Jídelní plán</span>
+            <span class="spec-tag">Načasování jídel</span>
+            <span class="spec-tag">Individuální přístup</span>
+          </div>
+        </div>
+
+        <!-- ÚNAVA A STRES -->
+        <div class="spec-card" data-category="hormony">
+          <div class="spec-card-header">
+            <div class="spec-icon">
+              <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="11" cy="11" r="7" stroke="#3d6b22" stroke-width="1.2"/>
+                <path d="M11 7 L11 11 L14 13" stroke="#6a9e45" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              </svg>
+            </div>
+            <h3 class="spec-title">Únava a stres</h3>
+          </div>
+          <p class="spec-text">
+            Podle identifikované příčiny navrhnu nejvhodnější postup, jak nabrat dostatek
+            energie a zvládat stresové situace snadněji. Chronická únava má vždy svůj
+            konkrétní kořen.
+          </p>
+          <div class="spec-tags">
+            <span class="spec-tag">Chronická únava</span>
+            <span class="spec-tag">Adrenální vyčerpání</span>
+            <span class="spec-tag">Zvládání stresu</span>
+          </div>
+        </div>
+
+        <!-- SPÁNEK -->
+        <div class="spec-card" data-category="ostatni">
+          <div class="spec-card-header">
+            <div class="spec-icon">
+              <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M14 4 C9 4, 5 8, 5 13 C5 17 8.5 20 13 20 C17 20 20 17.5 20 13.5 C16 14.5 12 12 14 4Z" stroke="#3d6b22" stroke-width="1.2" stroke-linejoin="round" fill="none"/>
+              </svg>
+            </div>
+            <h3 class="spec-title">Problémy se spánkem</h3>
+          </div>
+          <p class="spec-text">
+            Poradím, jak nespavosti předcházet a jak ji řešit, když nastane — s důrazem
+            na stravu, denní rytmus a přirozené podpůrné prostředky.
+          </p>
+          <div class="spec-tags">
+            <span class="spec-tag">Nespavost</span>
+            <span class="spec-tag">Denní rytmus</span>
+            <span class="spec-tag">Melatonin</span>
+          </div>
+        </div>
+
+        <!-- NESOUSTŘEDĚNOST / ADHD -->
+        <div class="spec-card" data-category="ostatni">
+          <div class="spec-card-header">
+            <div class="spec-icon">
+              <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="11" cy="11" r="3" stroke="#3d6b22" stroke-width="1.2"/>
+                <path d="M11 4 L11 7" stroke="#6a9e45" stroke-width="1" stroke-linecap="round" opacity="0.7"/>
+                <path d="M11 15 L11 18" stroke="#6a9e45" stroke-width="1" stroke-linecap="round" opacity="0.7"/>
+                <path d="M4 11 L7 11" stroke="#6a9e45" stroke-width="1" stroke-linecap="round" opacity="0.7"/>
+                <path d="M15 11 L18 11" stroke="#6a9e45" stroke-width="1" stroke-linecap="round" opacity="0.7"/>
+                <path d="M6.2 6.2 L8.3 8.3" stroke="#6a9e45" stroke-width="0.8" stroke-linecap="round" opacity="0.5"/>
+                <path d="M13.7 13.7 L15.8 15.8" stroke="#6a9e45" stroke-width="0.8" stroke-linecap="round" opacity="0.5"/>
+              </svg>
+            </div>
+            <h3 class="spec-title">Nesoustředěnost, ADHD</h3>
+          </div>
+          <p class="spec-text">
+            Vhodnou stravou a jejími doplňky lze zmírnit příznaky nerovnováhy centrální
+            nervové soustavy — u dětí i dospělých. Nutriční přístup vhodně doplňuje
+            klasickou péči.
+          </p>
+          <div class="spec-tags">
+            <span class="spec-tag">ADHD</span>
+            <span class="spec-tag">Hyperaktivita</span>
+            <span class="spec-tag">CNS</span>
+            <span class="spec-tag">Děti i dospělí</span>
+          </div>
+        </div>
+
+        <!-- EKZÉMY / KŮŽE -->
+        <div class="spec-card" data-category="ostatni">
+          <div class="spec-card-header">
+            <div class="spec-icon">
+              <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5 17 Q8 8 11 6 Q14 4 17 8 Q19 12 16 16 Q13 20 9 19 Q6 18 5 17Z" stroke="#3d6b22" stroke-width="1.2" fill="none"/>
+                <circle cx="11" cy="11" r="1" fill="#6a9e45" opacity="0.7"/>
+              </svg>
+            </div>
+            <h3 class="spec-title">Ekzémy a problémy s kůží</h3>
+          </div>
+          <p class="spec-text">
+            Kůže je odrazem vnitřního stavu organismu. Ekzémy, akné nebo psoriáza
+            mají často kořeny v trávení, potravinových intolerancích nebo hormonální
+            nerovnováze.
+          </p>
+          <div class="spec-tags">
+            <span class="spec-tag">Ekzém</span>
+            <span class="spec-tag">Akné</span>
+            <span class="spec-tag">Psoriáza</span>
+          </div>
+        </div>
+
+        <!-- PREVENCE -->
+        <div class="spec-card" data-category="ostatni">
+          <div class="spec-card-header">
+            <div class="spec-icon">
+              <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M11 3 L13.5 9 L20 9.5 L15 14 L16.5 20 L11 17 L5.5 20 L7 14 L2 9.5 L8.5 9 Z" stroke="#3d6b22" stroke-width="1.2" stroke-linejoin="round" fill="none"/>
+              </svg>
+            </div>
+            <h3 class="spec-title">Prevence civilizačních chorob</h3>
+          </div>
+          <p class="spec-text">
+            Diabetes, kardiovaskulární choroby, metabolický syndrom — strava a životní styl
+            jsou klíčovými faktory prevence. Vybuduji s vámi pevný základ pro dlouhodobé zdraví.
+          </p>
+          <div class="spec-tags">
+            <span class="spec-tag">Prevence</span>
+            <span class="spec-tag">Metabolismus</span>
+            <span class="spec-tag">Imunita</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================
+       PRŮBĚH KONZULTACE — 3 kroky
+  ============================================ -->
+  <section class="section consultation">
+    <div class="section-inner">
+      <p class="section-eyebrow">Jak to funguje</p>
+      <h2 class="section-title">Průběh spolupráce</h2>
+
+      <div class="steps">
+
+        <div class="step">
+          <div class="step-number">01</div>
+          <h3 class="step-title">Diagnostický rozbor</h3>
+          <p class="step-text">
+            První konzultace trvá zpravidla 2 hodiny. Provádím iridologický rozbor,
+            pohledovou diagnostiku, rozbor jazyka a měření. Podrobně projdeme váš jídelníček,
+            zdravotní historii a aktuální obtíže.
+          </p>
+        </div>
+
+        <div class="step">
+          <div class="step-number">02</div>
+          <h3 class="step-title">Nutriční protokol</h3>
+          <p class="step-text">
+            Druhé setkání přináší vyhodnocení všech zjištění a individuální nutriční protokol.
+            Navrhneme konkrétní změny ve stravě, případné doplňky stravy a další
+            terapeutické kroky.
+          </p>
+        </div>
+
+        <div class="step">
+          <div class="step-number">03</div>
+          <h3 class="step-title">Průběžná podpora</h3>
+          <p class="step-text">
+            Následné konzultace (60 minut) sledují váš pokrok a upravují terapeutický plán.
+            Jsem k dispozici také na kratší telefonické nebo e-mailové konzultace
+            pro aktuální dotazy.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================
+       KVALIFIKACE A CERTIFIKÁTY
+  ============================================ -->
+  <section class="section qualifications">
+    <div class="section-inner">
+      <p class="section-eyebrow">Vzdělání a praxe</p>
+      <h2 class="section-title">Profesní kvalifikace</h2>
+
+      <div class="qual-grid">
+
+        <div class="qual-item">
+          <span class="qual-year">2023</span>
+          <div class="qual-text">
+            <strong>Bachovy květové esence — Certifikát level 1 a 2</strong>
+            Pod záštitou The Dr. Edward Bach Centre
+          </div>
+        </div>
+
+        <div class="qual-item">
+          <span class="qual-year">2020</span>
+          <div class="qual-text">
+            <strong>Klinická nutriční medicína — absolventka</strong>
+            4letý obor na Škole klinické naturopatie
+          </div>
+        </div>
+
+        <div class="qual-item">
+          <span class="qual-year">2020</span>
+          <div class="qual-text">
+            <strong>Hormonální nerovnováha — certifikát</strong>
+            Testy funkční medicíny, Škola klinické naturopatie
+          </div>
+        </div>
+
+        <div class="qual-item">
+          <span class="qual-year">2020</span>
+          <div class="qual-text">
+            <strong>Tkáňové soli — certifikát</strong>
+            Škola klinické naturopatie
+          </div>
+        </div>
+
+        <div class="qual-item">
+          <span class="qual-year">2018</span>
+          <div class="qual-text">
+            <strong>Členka České naturopatické společnosti</strong>
+            Kontinuální odborné vzdělávání a etický kodex
+          </div>
+        </div>
+
+        <div class="qual-item">
+          <span class="qual-year">2014</span>
+          <div class="qual-text">
+            <strong>Poradkyně pro výživu — akreditace MŠMT</strong>
+            Státem akreditovaný kurz výživového poradenství
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================
+       CTA — výzva k objednání
+  ============================================ -->
+  <section class="cta-section">
+    <div class="section-inner">
+      <p class="section-eyebrow">Připravena vám pomoct</p>
+      <h2 class="section-title">Začněme společně</h2>
+      <p>
+        Nemusíte hned vědět, co přesně řešíte. Na první konzultaci si to spolu ujasníme.
+      </p>
+      <div class="cta-actions">
+        <a href="index.html#objednat" class="btn btn-primary">Objednat se →</a>
+        <a href="iridologie.html" class="btn btn-outline">Zjistit více o iridologii</a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================
+       FOOTER
+  ============================================ -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-logo">Monika <span>Novotná</span></div>
+        <p class="footer-tagline">Terapeutka klinické nutriční medicíny</p>
+        <div class="footer-contact">
+          <a href="mailto:monika@healthjam.cz">monika@healthjam.cz</a>
+          <a href="index.html">healthjam.cz/monikanovotna</a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <a href="specializace.html">Specializace</a>
+        <a href="iridologie.html">Iridologie</a>
+        <a href="blog.html">Blog</a>
+        <a href="reference.html">Reference</a>
+        <a href="newsletter.html">Newsletter</a>
+        <a href="gdpr.html">Ochrana osobních údajů</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Ing. Monika Novotná</span>
+      <a href="gdpr.html" style="color: rgba(255,255,255,0.3);">Ochrana osobních údajů</a>
+    </div>
+  </footer>
+
+
+  <!-- ============================================
+       JAVASCRIPT
+  ============================================ -->
+  <script>
+    // --- Hamburger menu (stejný kód jako v index.html) ---
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('nav-mobile');
+
+    hamburger.addEventListener('click', function() {
+      hamburger.classList.toggle('open');
+      mobileMenu.classList.toggle('open');
+    });
+
+    mobileMenu.querySelectorAll('a').forEach(function(link) {
+      link.addEventListener('click', function() {
+        hamburger.classList.remove('open');
+        mobileMenu.classList.remove('open');
+      });
+    });
+
+    // --- Filtrování karet specializací ---
+    // Funkce dostane kategorii (např. "hormony") a projde všechny karty.
+    // Karta, jejíž data-category odpovídá, zůstane viditelná.
+    // Ostatní se skryjí pomocí display: none.
+    function filterCards(category, btn) {
+      // Přepneme aktivní tlačítko
+      document.querySelectorAll('.filter-btn').forEach(function(b) {
+        b.classList.remove('active');
+      });
+      btn.classList.add('active');
+
+      // Zobrazíme/skryjeme karty
+      document.querySelectorAll('.spec-card').forEach(function(card) {
+        if (category === 'all') {
+          card.style.display = ''; // Zobraz vše
+        } else if (card.dataset.category === category) {
+          card.style.display = ''; // Zobraz shodu
+        } else {
+          card.style.display = 'none'; // Skryj ostatní
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>

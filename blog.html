@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog — Ing. Monika Novotná</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --green-light:   #f4f9f0;
+      --green-mid:     #c8dba8;
+      --green-accent:  #6a9e45;
+      --green-dark:    #3d6b22;
+      --green-deep:    #1c2316;
+      --gold:          #c9952a;
+      --gold-light:    #fdf3dc;
+      --cream:         #faf8f4;
+      --text-dark:     #1c2316;
+      --text-mid:      #4a5240;
+      --text-light:    #7a8470;
+      --border:        #ddd8ce;
+      --font-serif: 'Cormorant Garamond', Georgia, serif;
+      --font-sans:  'Jost', system-ui, sans-serif;
+      --max-width: 1100px;
+      --section-padding: 80px 24px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-sans); font-size: 16px; line-height: 1.7; color: var(--text-dark); background: var(--cream); }
+    img { max-width: 100%; height: auto; display: block; }
+    a { color: inherit; text-decoration: none; }
+
+    /* ============================================
+       NAVIGACE
+    ============================================ */
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(250, 248, 244, 0.95);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner { max-width: var(--max-width); margin: 0 auto; padding: 0 24px; height: 64px; display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { font-family: var(--font-serif); font-size: 20px; font-weight: 400; color: var(--text-dark); }
+    .nav-logo span { color: var(--green-dark); font-style: italic; }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a { font-size: 12px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-mid); transition: color 0.2s; padding-bottom: 2px; border-bottom: 1px solid transparent; }
+    .nav-links a:hover, .nav-links a.active { color: var(--green-dark); border-bottom-color: var(--green-accent); }
+    .nav-cta { font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: #fff; background: var(--green-dark); padding: 9px 20px; border-radius: 4px; transition: background 0.2s; }
+    .nav-cta:hover { background: var(--green-accent); }
+    .nav-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; background: none; border: none; }
+    .nav-hamburger span { display: block; width: 24px; height: 1.5px; background: var(--text-dark); transition: transform 0.3s, opacity 0.3s; }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+    .nav-mobile { display: none; flex-direction: column; background: var(--cream); border-bottom: 1px solid var(--border); padding: 16px 24px 24px; gap: 4px; }
+    .nav-mobile.open { display: flex; }
+    .nav-mobile a { font-size: 15px; color: var(--text-mid); padding: 10px 0; border-bottom: 1px solid var(--border); letter-spacing: 0.05em; }
+    .nav-mobile a:last-child { border-bottom: none; }
+    .nav-mobile a:hover { color: var(--green-dark); }
+
+    /* ============================================
+       PAGE HEADER
+    ============================================ */
+    .page-header {
+      background: var(--green-light);
+      border-bottom: 1px solid var(--green-mid);
+      padding: 56px 24px 48px;
+    }
+    .page-header-inner { max-width: var(--max-width); margin: 0 auto; }
+    .breadcrumb { display: flex; gap: 8px; align-items: center; font-size: 12px; color: var(--text-light); margin-bottom: 16px; }
+    .breadcrumb a { color: var(--green-dark); transition: color 0.2s; }
+    .breadcrumb a:hover { color: var(--green-accent); }
+    .page-title { font-family: var(--font-serif); font-size: clamp(36px, 5vw, 56px); font-weight: 300; line-height: 1.15; color: var(--text-dark); margin-bottom: 16px; }
+    .page-lead { font-size: 17px; color: var(--text-mid); max-width: 580px; line-height: 1.75; }
+
+    /* ============================================
+       SEKCE
+    ============================================ */
+    .section { padding: var(--section-padding); }
+    .section-inner { max-width: var(--max-width); margin: 0 auto; }
+    .section-eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--green-dark); margin-bottom: 12px; }
+    .section-title { font-family: var(--font-serif); font-size: clamp(26px, 3.5vw, 38px); font-weight: 300; line-height: 1.2; color: var(--text-dark); margin-bottom: 20px; }
+
+    /* ============================================
+       KATEGORIE FILTR
+    ============================================ */
+    .filter-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 48px; }
+    .filter-btn { font-size: 11px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; padding: 7px 16px; border-radius: 20px; border: 1px solid var(--border); background: transparent; color: var(--text-mid); cursor: pointer; transition: all 0.2s; }
+    .filter-btn:hover { border-color: var(--green-accent); color: var(--green-dark); }
+    .filter-btn.active { background: var(--green-dark); border-color: var(--green-dark); color: #fff; }
+
+    /* ============================================
+       HLAVNÍ (FEATURED) ČLÁNEK — velká karta nahoře
+       Při přidání prvního skutečného článku sem dáš
+       nejnovější nebo nejdůležitější příspěvek.
+    ============================================ */
+    .article-featured {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 48px;
+      background: #fff;
+    }
+
+    /* Placeholder pro obrázek článku */
+    .article-featured-img {
+      background: var(--green-mid);
+      min-height: 320px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--green-dark);
+      font-size: 13px;
+    }
+
+    /* Pokud máš obrázek: <img src="img/blog/clanek-01.jpg" ...> */
+    .article-featured-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .article-featured-body { padding: 40px; display: flex; flex-direction: column; justify-content: center; }
+
+    .article-category {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: var(--green-light);
+      color: var(--green-dark);
+      border: 1px solid var(--green-mid);
+      margin-bottom: 14px;
+    }
+
+    .article-title {
+      font-family: var(--font-serif);
+      font-size: clamp(22px, 3vw, 32px);
+      font-weight: 400;
+      line-height: 1.2;
+      color: var(--text-dark);
+      margin-bottom: 12px;
+    }
+
+    .article-excerpt {
+      font-size: 15px;
+      color: var(--text-mid);
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
+
+    .article-meta {
+      font-size: 12px;
+      color: var(--text-light);
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .article-meta-sep { color: var(--border); }
+
+    .article-link {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--green-dark);
+      border-bottom: 1px solid var(--green-accent);
+      padding-bottom: 1px;
+      transition: color 0.2s;
+      align-self: flex-start;
+    }
+    .article-link:hover { color: var(--green-accent); }
+
+    /* ============================================
+       MŘÍŽKA ČLÁNKŮ — menší karty
+    ============================================ */
+    .articles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    .article-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      transition: border-color 0.2s, transform 0.2s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .article-card:hover {
+      border-color: var(--green-accent);
+      transform: translateY(-2px);
+    }
+
+    /* Obrázek karty — placeholder nebo skutečná fotka */
+    .article-card-img {
+      height: 180px;
+      background: var(--green-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-light);
+      font-size: 12px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .article-card-img img { width: 100%; height: 100%; object-fit: cover; }
+
+    .article-card-body {
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .article-card-title {
+      font-family: var(--font-serif);
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 1.3;
+      color: var(--text-dark);
+      margin-bottom: 8px;
+    }
+
+    .article-card-excerpt {
+      font-size: 13px;
+      color: var(--text-mid);
+      line-height: 1.65;
+      margin-bottom: 16px;
+      flex: 1;
+    }
+
+    .article-card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+      margin-top: auto;
+    }
+
+    .article-card-meta { font-size: 11px; color: var(--text-light); }
+
+    /* ============================================
+       PRÁZDNÝ STAV — zobrazí se dokud nejsou články
+    ============================================ */
+    .empty-state {
+      text-align: center;
+      padding: 64px 24px;
+      background: #fff;
+      border: 1px dashed var(--border);
+      border-radius: 8px;
+    }
+
+    .empty-state-icon {
+      width: 56px;
+      height: 56px;
+      margin: 0 auto 20px;
+      background: var(--green-light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .empty-state-icon svg { width: 24px; height: 24px; }
+
+    .empty-state h3 {
+      font-family: var(--font-serif);
+      font-size: 22px;
+      font-weight: 400;
+      color: var(--text-dark);
+      margin-bottom: 8px;
+    }
+
+    .empty-state p { font-size: 14px; color: var(--text-light); max-width: 360px; margin: 0 auto 24px; }
+
+    /* ============================================
+       NEWSLETTER PROMO — banner pod články
+    ============================================ */
+    .newsletter-promo {
+      background: var(--green-deep);
+      border-radius: 8px;
+      padding: 40px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 32px;
+      margin-top: 64px;
+      flex-wrap: wrap;
+    }
+
+    .newsletter-promo-text h3 {
+      font-family: var(--font-serif);
+      font-size: 26px;
+      font-weight: 300;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+
+    .newsletter-promo-text p { font-size: 14px; color: rgba(255,255,255,0.6); max-width: 400px; }
+
+    .newsletter-promo-form {
+      display: flex;
+      gap: 10px;
+      flex-shrink: 0;
+      flex-wrap: wrap;
+    }
+
+    .newsletter-promo-form input {
+      font-family: var(--font-sans);
+      font-size: 14px;
+      padding: 10px 16px;
+      border-radius: 4px;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+      width: 220px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .newsletter-promo-form input::placeholder { color: rgba(255,255,255,0.35); }
+    .newsletter-promo-form input:focus { border-color: var(--green-mid); }
+
+    .btn { display: inline-block; font-family: var(--font-sans); font-size: 12px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; padding: 11px 24px; border-radius: 4px; border: 1.5px solid transparent; cursor: pointer; transition: all 0.2s; }
+    .btn-primary { background: var(--green-accent); color: #fff; border-color: var(--green-accent); }
+    .btn-primary:hover { background: var(--green-dark); border-color: var(--green-dark); }
+
+    /* ============================================
+       FOOTER
+    ============================================ */
+    .footer { background: var(--green-deep); color: rgba(255,255,255,0.6); padding: 48px 24px; border-top: 1px solid rgba(255,255,255,0.07); }
+    .footer-inner { max-width: var(--max-width); margin: 0 auto; display: grid; grid-template-columns: 1fr auto; gap: 32px; align-items: start; }
+    .footer-logo { font-family: var(--font-serif); font-size: 20px; color: #fff; margin-bottom: 8px; }
+    .footer-logo span { font-style: italic; color: var(--green-mid); }
+    .footer-tagline { font-size: 13px; color: rgba(255,255,255,0.5); margin-bottom: 16px; }
+    .footer-contact a { display: block; font-size: 13px; color: var(--green-mid); margin-bottom: 4px; transition: color 0.2s; }
+    .footer-contact a:hover { color: #fff; }
+    .footer-links { display: flex; flex-direction: column; gap: 8px; text-align: right; }
+    .footer-links a { font-size: 12px; color: rgba(255,255,255,0.5); transition: color 0.2s; letter-spacing: 0.05em; }
+    .footer-links a:hover { color: var(--green-mid); }
+    .footer-bottom { max-width: var(--max-width); margin: 32px auto 0; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; font-size: 11px; color: rgba(255,255,255,0.3); flex-wrap: wrap; gap: 8px; }
+
+    /* ============================================
+       RESPONZIVITA
+    ============================================ */
+    @media (max-width: 900px) {
+      :root { --section-padding: 60px 20px; }
+      .article-featured { grid-template-columns: 1fr; }
+      .article-featured-img { min-height: 220px; }
+      .newsletter-promo { flex-direction: column; padding: 32px 24px; }
+      .footer-inner { grid-template-columns: 1fr; }
+      .footer-links { text-align: left; }
+    }
+
+    @media (max-width: 640px) {
+      :root { --section-padding: 48px 16px; }
+      .nav-links, .nav-cta { display: none; }
+      .nav-hamburger { display: flex; }
+      .articles-grid { grid-template-columns: 1fr; }
+      .newsletter-promo-form { width: 100%; }
+      .newsletter-promo-form input { width: 100%; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">Monika <span>Novotná</span></a>
+      <ul class="nav-links">
+        <li><a href="index.html">O mně</a></li>
+        <li><a href="specializace.html">Specializace</a></li>
+        <li><a href="iridologie.html">Iridologie</a></li>
+        <li><a href="blog.html" class="active">Blog</a></li>
+        <li><a href="reference.html">Reference</a></li>
+      </ul>
+      <a href="index.html#objednat" class="nav-cta">Objednat se</a>
+      <button class="nav-hamburger" id="hamburger" aria-label="Otevřít menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="nav-mobile" id="nav-mobile">
+      <a href="index.html">O mně</a>
+      <a href="specializace.html">Specializace</a>
+      <a href="iridologie.html">Iridologie</a>
+      <a href="blog.html">Blog</a>
+      <a href="reference.html">Reference</a>
+      <a href="index.html#objednat" style="color: var(--green-dark); font-weight: 500;">→ Objednat se</a>
+    </div>
+  </nav>
+
+  <header class="page-header">
+    <div class="page-header-inner">
+      <nav class="breadcrumb" aria-label="Kde se nacházíte">
+        <a href="index.html">Domů</a>
+        <span>›</span>
+        <span>Blog</span>
+      </nav>
+      <h1 class="page-title">Blog</h1>
+      <p class="page-lead">
+        Články o výživě, iridologii a přirozeném zdraví.
+        Praktické tipy i hlubší pohled na témata, která řeším se svými klienty.
+      </p>
+    </div>
+  </header>
+
+  <section class="section" style="background: #fff;">
+    <div class="section-inner">
+
+      <!-- KATEGORIE -->
+      <div class="filter-bar">
+        <button class="filter-btn active" onclick="filterArticles('all', this)">Vše</button>
+        <button class="filter-btn" onclick="filterArticles('iridologie', this)">Iridologie</button>
+        <button class="filter-btn" onclick="filterArticles('strava', this)">Strava</button>
+        <button class="filter-btn" onclick="filterArticles('hormony', this)">Hormony</button>
+        <button class="filter-btn" onclick="filterArticles('zazivani', this)">Zažívání</button>
+      </div>
+
+      <!--
+        ============================================================
+        HLAVNÍ ČLÁNEK (FEATURED)
+        ============================================================
+        Jak přidat první článek:
+        1. Zkopíruj blok .article-featured níže
+        2. Vyplň: kategorii, nadpis, perex, datum, odhadovanou dobu čtení
+        3. Do .article-featured-img vlož:
+           <img src="img/blog/nazev-clanku.jpg" alt="Popis obrázku">
+        4. Odkaz na detail článku: href="blog/nazev-clanku.html"
+        ============================================================
+      -->
+      <div class="article-featured" data-category="placeholder">
+        <div class="article-featured-img">
+          <!--
+            SEM PATŘÍ OBRÁZEK PRVNÍHO ČLÁNKU:
+            <img src="img/blog/prvni-clanek.jpg" alt="Název článku">
+          -->
+          <div style="text-align:center; padding: 24px;">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" style="margin: 0 auto 10px; opacity: 0.4;">
+              <rect x="4" y="8" width="32" height="4" rx="2" fill="#3d6b22"/>
+              <rect x="4" y="18" width="24" height="3" rx="1.5" fill="#3d6b22"/>
+              <rect x="4" y="26" width="28" height="3" rx="1.5" fill="#3d6b22"/>
+            </svg>
+            <p style="font-size:12px; color: var(--green-dark);">Obrázek prvního článku</p>
+          </div>
+        </div>
+        <div class="article-featured-body">
+          <span class="article-category">Kategorie článku</span>
+          <h2 class="article-title">Nadpis prvního článku — doplní Monika</h2>
+          <div class="article-meta">
+            <span>DD. MM. RRRR</span>
+            <span class="article-meta-sep">·</span>
+            <span>X min čtení</span>
+          </div>
+          <p class="article-excerpt">
+            Krátký perex článku — 2–3 věty, které přilákají čtenáře ke kliknutí.
+            Měl by vystihovat hlavní myšlenku a přínos článku pro čtenáře.
+          </p>
+          <a href="#" class="article-link">Číst celý článek →</a>
+        </div>
+      </div>
+
+      <!--
+        ============================================================
+        MŘÍŽKA DALŠÍCH ČLÁNKŮ
+        ============================================================
+        Každá .article-card je jeden článek.
+        data-category odpovídá kategorii pro filtrování:
+        "iridologie" | "strava" | "hormony" | "zazivani"
+
+        Jak přidat nový článek:
+        Zkopíruj celý blok .article-card a vyplň údaje.
+        ============================================================
+      -->
+      <div class="articles-grid" id="articles-grid">
+
+        <!-- KARTA 1 — placeholder -->
+        <article class="article-card" data-category="strava">
+          <div class="article-card-img">
+            <!--
+              SEM PATŘÍ OBRÁZEK:
+              <img src="img/blog/clanek-02.jpg" alt="Název článku">
+            -->
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" style="opacity:0.3;">
+              <rect x="3" y="6" width="26" height="3" rx="1.5" fill="#3d6b22"/>
+              <rect x="3" y="14" width="20" height="2.5" rx="1.25" fill="#3d6b22"/>
+              <rect x="3" y="21" width="22" height="2.5" rx="1.25" fill="#3d6b22"/>
+            </svg>
+          </div>
+          <div class="article-card-body">
+            <span class="article-category">Strava</span>
+            <h3 class="article-card-title">Nadpis článku — doplní Monika</h3>
+            <p class="article-card-excerpt">
+              Krátký perex — 1–2 věty vystihující obsah článku a jeho přínos pro čtenáře.
+            </p>
+            <div class="article-card-footer">
+              <span class="article-card-meta">DD. MM. RRRR · X min</span>
+              <a href="#" class="article-link">Číst →</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- KARTA 2 — placeholder -->
+        <article class="article-card" data-category="hormony">
+          <div class="article-card-img">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" style="opacity:0.3;">
+              <rect x="3" y="6" width="26" height="3" rx="1.5" fill="#3d6b22"/>
+              <rect x="3" y="14" width="20" height="2.5" rx="1.25" fill="#3d6b22"/>
+              <rect x="3" y="21" width="22" height="2.5" rx="1.25" fill="#3d6b22"/>
+            </svg>
+          </div>
+          <div class="article-card-body">
+            <span class="article-category">Hormony</span>
+            <h3 class="article-card-title">Nadpis článku — doplní Monika</h3>
+            <p class="article-card-excerpt">
+              Krátký perex — 1–2 věty vystihující obsah článku a jeho přínos pro čtenáře.
+            </p>
+            <div class="article-card-footer">
+              <span class="article-card-meta">DD. MM. RRRR · X min</span>
+              <a href="#" class="article-link">Číst →</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- KARTA 3 — placeholder -->
+        <article class="article-card" data-category="iridologie">
+          <div class="article-card-img">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" style="opacity:0.3;">
+              <rect x="3" y="6" width="26" height="3" rx="1.5" fill="#3d6b22"/>
+              <rect x="3" y="14" width="20" height="2.5" rx="1.25" fill="#3d6b22"/>
+              <rect x="3" y="21" width="22" height="2.5" rx="1.25" fill="#3d6b22"/>
+            </svg>
+          </div>
+          <div class="article-card-body">
+            <span class="article-category">Iridologie</span>
+            <h3 class="article-card-title">Nadpis článku — doplní Monika</h3>
+            <p class="article-card-excerpt">
+              Krátký perex — 1–2 věty vystihující obsah článku a jeho přínos pro čtenáře.
+            </p>
+            <div class="article-card-footer">
+              <span class="article-card-meta">DD. MM. RRRR · X min</span>
+              <a href="#" class="article-link">Číst →</a>
+            </div>
+          </div>
+        </article>
+
+      </div>
+
+      <!-- Newsletter promo banner -->
+      <div class="newsletter-promo">
+        <div class="newsletter-promo-text">
+          <h3>Nové články přímo do e-mailu</h3>
+          <p>Přihlaste se k odběru a dostávejte nové články a tipy o výživě a zdraví.</p>
+        </div>
+        <div class="newsletter-promo-form">
+          <!--
+            NEWSLETTER FORMULÁŘ:
+            Pro funkční odesílání je potřeba napojit na e-mailovou službu
+            (Mailchimp, Ecomail aj.) — řešíme v technické konverzaci.
+          -->
+          <input type="email" placeholder="váš@email.cz">
+          <button class="btn btn-primary">Přihlásit se →</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-logo">Monika <span>Novotná</span></div>
+        <p class="footer-tagline">Terapeutka klinické nutriční medicíny</p>
+        <div class="footer-contact">
+          <a href="mailto:monika@healthjam.cz">monika@healthjam.cz</a>
+          <a href="index.html">healthjam.cz/monikanovotna</a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <a href="specializace.html">Specializace</a>
+        <a href="iridologie.html">Iridologie</a>
+        <a href="blog.html">Blog</a>
+        <a href="reference.html">Reference</a>
+        <a href="newsletter.html">Newsletter</a>
+        <a href="gdpr.html">Ochrana osobních údajů</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Ing. Monika Novotná</span>
+      <a href="gdpr.html" style="color: rgba(255,255,255,0.3);">Ochrana osobních údajů</a>
+    </div>
+  </footer>
+
+  <script>
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('nav-mobile');
+    hamburger.addEventListener('click', function() {
+      hamburger.classList.toggle('open');
+      mobileMenu.classList.toggle('open');
+    });
+    mobileMenu.querySelectorAll('a').forEach(function(link) {
+      link.addEventListener('click', function() {
+        hamburger.classList.remove('open');
+        mobileMenu.classList.remove('open');
+      });
+    });
+
+    function filterArticles(category, btn) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.article-card').forEach(function(card) {
+        card.style.display = (category === 'all' || card.dataset.category === category) ? '' : 'none';
+      });
+    }
+  </script>
+
+</body>
+</html>

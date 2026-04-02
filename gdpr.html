@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ochrana osobních údajů — Ing. Monika Novotná</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --green-light:   #f4f9f0;
+      --green-mid:     #c8dba8;
+      --green-accent:  #6a9e45;
+      --green-dark:    #3d6b22;
+      --green-deep:    #1c2316;
+      --gold:          #c9952a;
+      --gold-light:    #fdf3dc;
+      --cream:         #faf8f4;
+      --text-dark:     #1c2316;
+      --text-mid:      #4a5240;
+      --text-light:    #7a8470;
+      --border:        #ddd8ce;
+      --font-serif: 'Cormorant Garamond', Georgia, serif;
+      --font-sans:  'Jost', system-ui, sans-serif;
+      --max-width: 1100px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-sans); font-size: 16px; line-height: 1.7; color: var(--text-dark); background: var(--cream); }
+    a { color: inherit; text-decoration: none; }
+
+    /* NAVIGACE */
+    .nav { position: sticky; top: 0; z-index: 100; background: rgba(250, 248, 244, 0.95); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); }
+    .nav-inner { max-width: var(--max-width); margin: 0 auto; padding: 0 24px; height: 64px; display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { font-family: var(--font-serif); font-size: 20px; font-weight: 400; color: var(--text-dark); }
+    .nav-logo span { color: var(--green-dark); font-style: italic; }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a { font-size: 12px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-mid); transition: color 0.2s; padding-bottom: 2px; border-bottom: 1px solid transparent; }
+    .nav-links a:hover { color: var(--green-dark); border-bottom-color: var(--green-accent); }
+    .nav-cta { font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: #fff; background: var(--green-dark); padding: 9px 20px; border-radius: 4px; transition: background 0.2s; }
+    .nav-cta:hover { background: var(--green-accent); }
+    .nav-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; background: none; border: none; }
+    .nav-hamburger span { display: block; width: 24px; height: 1.5px; background: var(--text-dark); transition: transform 0.3s, opacity 0.3s; }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+    .nav-mobile { display: none; flex-direction: column; background: var(--cream); border-bottom: 1px solid var(--border); padding: 16px 24px 24px; gap: 4px; }
+    .nav-mobile.open { display: flex; }
+    .nav-mobile a { font-size: 15px; color: var(--text-mid); padding: 10px 0; border-bottom: 1px solid var(--border); letter-spacing: 0.05em; }
+    .nav-mobile a:last-child { border-bottom: none; }
+    .nav-mobile a:hover { color: var(--green-dark); }
+
+    /* PAGE HEADER */
+    .page-header { background: var(--green-light); border-bottom: 1px solid var(--green-mid); padding: 56px 24px 48px; }
+    .page-header-inner { max-width: var(--max-width); margin: 0 auto; }
+    .breadcrumb { display: flex; gap: 8px; align-items: center; font-size: 12px; color: var(--text-light); margin-bottom: 16px; }
+    .breadcrumb a { color: var(--green-dark); transition: color 0.2s; }
+    .page-title { font-family: var(--font-serif); font-size: clamp(32px, 4vw, 48px); font-weight: 300; line-height: 1.15; color: var(--text-dark); margin-bottom: 12px; }
+    .page-subtitle { font-size: 14px; color: var(--text-light); }
+
+    /* ============================================
+       LAYOUT DOKUMENTU
+       Dvousloupcový layout: obsah vlevo, navigace
+       po dokumentu vpravo (na desktopu).
+    ============================================ */
+    .doc-layout {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 64px 24px 80px;
+      display: grid;
+      grid-template-columns: 1fr 260px;
+      gap: 64px;
+      align-items: start;
+    }
+
+    /* ============================================
+       POSTRANNÍ OBSAH DOKUMENTU
+       Sticky panel — zůstane viditelný při scrollování.
+       Obsahuje rychlé odkazy na jednotlivé sekce.
+    ============================================ */
+    .doc-toc {
+      position: sticky;
+      top: 84px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 20px;
+    }
+
+    .doc-toc-title {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-light);
+      margin-bottom: 12px;
+    }
+
+    .doc-toc a {
+      display: block;
+      font-size: 13px;
+      color: var(--text-mid);
+      padding: 6px 0;
+      border-bottom: 1px solid var(--border);
+      transition: color 0.2s;
+      line-height: 1.4;
+    }
+
+    .doc-toc a:last-child { border-bottom: none; }
+    .doc-toc a:hover { color: var(--green-dark); }
+
+    .doc-toc-updated {
+      font-size: 11px;
+      color: var(--text-light);
+      margin-top: 16px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ============================================
+       OBSAH DOKUMENTU — typografie
+    ============================================ */
+    .doc-content { max-width: 680px; }
+
+    /* Každá sekce dokumentu */
+    .doc-section {
+      margin-bottom: 48px;
+      padding-bottom: 48px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .doc-section:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    /* Číslo + nadpis sekce */
+    .doc-section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .doc-section-num {
+      font-family: var(--font-serif);
+      font-size: 28px;
+      font-weight: 300;
+      color: var(--green-mid);
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .doc-section-title {
+      font-family: var(--font-serif);
+      font-size: 22px;
+      font-weight: 400;
+      color: var(--text-dark);
+      line-height: 1.2;
+    }
+
+    /* Odstavce */
+    .doc-content p {
+      font-size: 15px;
+      color: var(--text-mid);
+      line-height: 1.8;
+      margin-bottom: 14px;
+    }
+
+    .doc-content p:last-child { margin-bottom: 0; }
+
+    /* Zvýraznění důležitých pojmů */
+    .doc-content strong {
+      font-weight: 500;
+      color: var(--text-dark);
+    }
+
+    /* Informační tabulka — kontaktní údaje správce */
+    .info-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 14px;
+    }
+
+    .info-table tr { border-bottom: 1px solid var(--border); }
+    .info-table tr:last-child { border-bottom: none; }
+
+    .info-table td {
+      padding: 10px 0;
+      vertical-align: top;
+      line-height: 1.6;
+    }
+
+    .info-table td:first-child {
+      font-weight: 500;
+      color: var(--text-dark);
+      width: 160px;
+      flex-shrink: 0;
+    }
+
+    .info-table td:last-child { color: var(--text-mid); }
+
+    /* Seznam práv subjektu — stylizovaný */
+    .rights-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      margin: 20px 0;
+    }
+
+    .rights-list li {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+      color: var(--text-mid);
+      line-height: 1.6;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .rights-list li:last-child { border-bottom: none; }
+
+    /* Zelená tečka před každým právem */
+    .rights-list li::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green-accent);
+      flex-shrink: 0;
+      margin-top: 6px;
+    }
+
+    .rights-list li strong {
+      display: block;
+      font-weight: 500;
+      color: var(--text-dark);
+      margin-bottom: 2px;
+    }
+
+    /* Tabulka zpracování — přehledný přehled účelů */
+    .processing-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin: 20px 0;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .processing-table thead { background: var(--green-light); }
+
+    .processing-table th {
+      text-align: left;
+      padding: 10px 14px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--green-dark);
+      border-bottom: 1px solid var(--green-mid);
+    }
+
+    .processing-table td {
+      padding: 11px 14px;
+      color: var(--text-mid);
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+      line-height: 1.5;
+    }
+
+    .processing-table tr:last-child td { border-bottom: none; }
+
+    /* Zvýrazněný box — upozornění */
+    .highlight-box {
+      background: var(--gold-light);
+      border: 1px solid #f0e0b8;
+      border-left: 3px solid var(--gold);
+      border-radius: 0 6px 6px 0;
+      padding: 16px 20px;
+      margin: 20px 0;
+      font-size: 14px;
+      color: var(--text-mid);
+      line-height: 1.7;
+    }
+
+    .highlight-box strong { color: var(--text-dark); }
+
+    /* FOOTER */
+    .footer { background: var(--green-deep); color: rgba(255,255,255,0.6); padding: 48px 24px; }
+    .footer-inner { max-width: var(--max-width); margin: 0 auto; display: grid; grid-template-columns: 1fr auto; gap: 32px; align-items: start; }
+    .footer-logo { font-family: var(--font-serif); font-size: 20px; color: #fff; margin-bottom: 8px; }
+    .footer-logo span { font-style: italic; color: var(--green-mid); }
+    .footer-tagline { font-size: 13px; color: rgba(255,255,255,0.5); margin-bottom: 16px; }
+    .footer-contact a { display: block; font-size: 13px; color: var(--green-mid); margin-bottom: 4px; transition: color 0.2s; }
+    .footer-contact a:hover { color: #fff; }
+    .footer-links { display: flex; flex-direction: column; gap: 8px; text-align: right; }
+    .footer-links a { font-size: 12px; color: rgba(255,255,255,0.5); transition: color 0.2s; letter-spacing: 0.05em; }
+    .footer-links a:hover { color: var(--green-mid); }
+    .footer-bottom { max-width: var(--max-width); margin: 32px auto 0; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; font-size: 11px; color: rgba(255,255,255,0.3); flex-wrap: wrap; gap: 8px; }
+
+    /* RESPONZIVITA */
+    @media (max-width: 900px) {
+      .doc-layout { grid-template-columns: 1fr; gap: 40px; padding: 48px 20px 64px; }
+      .doc-toc { position: static; }
+      .footer-inner { grid-template-columns: 1fr; }
+      .footer-links { text-align: left; }
+    }
+
+    @media (max-width: 640px) {
+      .nav-links, .nav-cta { display: none; }
+      .nav-hamburger { display: flex; }
+      .info-table td:first-child { width: 120px; }
+      .doc-layout { padding: 40px 16px 56px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">Monika <span>Novotná</span></a>
+      <ul class="nav-links">
+        <li><a href="index.html">O mně</a></li>
+        <li><a href="specializace.html">Specializace</a></li>
+        <li><a href="iridologie.html">Iridologie</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="reference.html">Reference</a></li>
+      </ul>
+      <a href="index.html#objednat" class="nav-cta">Objednat se</a>
+      <button class="nav-hamburger" id="hamburger" aria-label="Otevřít menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="nav-mobile" id="nav-mobile">
+      <a href="index.html">O mně</a>
+      <a href="specializace.html">Specializace</a>
+      <a href="iridologie.html">Iridologie</a>
+      <a href="blog.html">Blog</a>
+      <a href="reference.html">Reference</a>
+      <a href="index.html#objednat" style="color: var(--green-dark); font-weight: 500;">→ Objednat se</a>
+    </div>
+  </nav>
+
+  <header class="page-header">
+    <div class="page-header-inner">
+      <nav class="breadcrumb" aria-label="Kde se nacházíte">
+        <a href="index.html">Domů</a>
+        <span>›</span>
+        <span>Ochrana osobních údajů</span>
+      </nav>
+      <h1 class="page-title">Ochrana osobních údajů</h1>
+      <p class="page-subtitle">Platné od 1. ledna 2025 · Poslední aktualizace: 1. ledna 2025</p>
+    </div>
+  </header>
+
+
+  <div class="doc-layout">
+
+    <!-- ============================================
+         HLAVNÍ OBSAH DOKUMENTU
+    ============================================ -->
+    <main class="doc-content">
+
+      <!-- 1. SPRÁVCE -->
+      <div class="doc-section" id="spravce">
+        <div class="doc-section-header">
+          <span class="doc-section-num">01</span>
+          <h2 class="doc-section-title">Správce osobních údajů</h2>
+        </div>
+
+        <p>
+          Správcem osobních údajů ve smyslu čl. 4 odst. 7 nařízení Evropského parlamentu
+          a Rady (EU) 2016/679 (dále jen <strong>„GDPR"</strong>) je:
+        </p>
+
+        <table class="info-table">
+          <tr>
+            <td>Jméno a příjmení</td>
+            <td>Ing. Monika Novotná</td>
+          </tr>
+          <tr>
+            <td>IČO</td>
+            <td>21423601</td>
+          </tr>
+          <tr>
+            <td>Místo podnikání</td>
+            <td>Praha, Česká republika</td>
+          </tr>
+          <tr>
+            <td>E-mail</td>
+            <td><a href="mailto:monika@healthjam.cz" style="color: var(--green-dark);">monika@healthjam.cz</a></td>
+          </tr>
+          <tr>
+            <td>Web</td>
+            <td>healthjam.cz/monikanovotna</td>
+          </tr>
+        </table>
+      </div>
+
+
+      <!-- 2. JAKÉ ÚDAJE A PROČ -->
+      <div class="doc-section" id="zpracovani">
+        <div class="doc-section-header">
+          <span class="doc-section-num">02</span>
+          <h2 class="doc-section-title">Jaké údaje zpracovávám a proč</h2>
+        </div>
+
+        <p>
+          Zpracovávám pouze osobní údaje, které mi sami poskytnete — a jen v rozsahu
+          nezbytném pro daný účel. Přehled zpracování:
+        </p>
+
+        <table class="processing-table">
+          <thead>
+            <tr>
+              <th>Účel zpracování</th>
+              <th>Zpracovávané údaje</th>
+              <th>Právní základ</th>
+              <th>Doba uchování</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Odběr newsletteru</strong></td>
+              <td>E-mailová adresa, jméno (nepovinné)</td>
+              <td>Souhlas (čl. 6 odst. 1 písm. a GDPR)</td>
+              <td>Do odvolání souhlasu</td>
+            </tr>
+            <tr>
+              <td><strong>Rezervace konzultace</strong></td>
+              <td>Jméno, e-mail, telefon (nepovinný), zvolený termín</td>
+              <td>Plnění smlouvy (čl. 6 odst. 1 písm. b GDPR)</td>
+              <td>3 roky od poslední konzultace</td>
+            </tr>
+            <tr>
+              <td><strong>Kontaktní formulář</strong></td>
+              <td>Jméno, e-mail, text zprávy</td>
+              <td>Oprávněný zájem správce (čl. 6 odst. 1 písm. f GDPR)</td>
+              <td>1 rok od zodpovězení dotazu</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="highlight-box">
+          <strong>Zdravotní a citlivé údaje:</strong> V rámci terapeutických konzultací
+          mohou být zpracovávány citlivé osobní údaje týkající se zdravotního stavu
+          (zvláštní kategorie dle čl. 9 GDPR). Tyto údaje zpracováváme výhradně
+          na základě vašeho výslovného souhlasu uděleného před zahájením konzultace,
+          nebo za účelem poskytnutí zdravotní péče dle čl. 9 odst. 2 písm. h GDPR.
+        </div>
+      </div>
+
+
+      <!-- 3. PŘÍJEMCI -->
+      <div class="doc-section" id="prijemci">
+        <div class="doc-section-header">
+          <span class="doc-section-num">03</span>
+          <h2 class="doc-section-title">Příjemci osobních údajů</h2>
+        </div>
+
+        <p>
+          Vaše osobní údaje neprodávám ani neposkytuji třetím stranám za marketingovými ani jinými
+          účely. Údaje mohou být předány pouze v případech zajištění funkce dané služby. V takovém případě je daný subjekt veden jako zpracovatel:
+        </p>
+
+        <p>
+          <strong>Rezervační systém (Calendly):</strong> Pro správu rezervací konzultací
+          využíváme službu Calendly (Calendly LLC, USA). Při rezervaci termínu jsou
+          předány jméno a e-mail za účelem potvrzení a připomenutí termínu.
+          Calendly LLC je zapojena do programu EU–US Data Privacy Framework.
+        </p>
+
+        <p>
+          <strong>E-mailová komunikace:</strong> Pro odesílání newsletteru a potvrzení
+          rezervací využíváme e-mailového poskytovatele XY. Sdílení emailové adresy pro účel zajištění služby se řídí podmínkami dané služby.
+        </p>
+
+        <p>
+          <strong>Zákonná povinnost:</strong> Osobní údaje mohou být poskytnuty orgánům
+          veřejné moci, pokud nám to ukládá zákon (např. daňová evidence, správní řízení).
+        </p>
+
+      </div>
+
+
+
+      <!-- 4. SOUBORY COOKIE -->
+      <div class="doc-section" id="cookies">
+        <div class="doc-section-header">
+          <span class="doc-section-num">04</span>
+          <h2 class="doc-section-title">Soubory cookie</h2>
+        </div>
+
+        <p>
+          Tento web v současné době využívá pouze technicky nezbytné soubory cookie,
+          které zajišťují základní funkčnost stránek (například zapamatování stavu
+          formulářů v rámci jedné relace). Tyto cookies nevyžadují váš souhlas
+          dle § 89 zákona č. 127/2005 Sb.
+        </p>
+
+        <p>
+          Web v tuto chvíli <strong>nevyužívá</strong> analytické, marketingové ani sledovací cookies
+          třetích stran. Pokud se tato praxe v budoucnu změní, budete o tom předem
+          informováni a bude vám umožněno udělit nebo odmítnout souhlas.
+        </p>
+      </div>
+
+
+      <!-- 5. ZMĚNY DOKUMENTU -->
+      <div class="doc-section" id="zmeny">
+        <div class="doc-section-header">
+          <span class="doc-section-num">05</span>
+          <h2 class="doc-section-title">Změny tohoto dokumentu</h2>
+        </div>
+
+        <p>
+          Tento dokument může být průběžně aktualizován — například při zavedení nových
+          funkcí webu nebo změně právních předpisů.
+        </p>
+
+
+        <p style="margin-top: 32px; font-size: 13px; color: var(--text-light);">
+          Dokument byl sestaven v souladu s nařízením GDPR (EU) 2016/679
+          a zákonem č. 110/2019 Sb., o zpracování osobních údajů.
+        </p>
+      </div>
+
+    </main>
+
+
+
+  </div>
+
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-logo">Monika <span>Novotná</span></div>
+        <p class="footer-tagline">Terapeutka klinické nutriční medicíny</p>
+        <div class="footer-contact">
+          <a href="mailto:monika@healthjam.cz">monika@healthjam.cz</a>
+          <a href="index.html">healthjam.cz/monikanovotna</a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <a href="specializace.html">Specializace</a>
+        <a href="iridologie.html">Iridologie</a>
+        <a href="blog.html">Blog</a>
+        <a href="reference.html">Reference</a>
+        <a href="newsletter.html">Newsletter</a>
+        <a href="gdpr.html">Ochrana osobních údajů</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Ing. Monika Novotná · IČO 21423601</span>
+      <a href="gdpr.html" style="color: rgba(255,255,255,0.5);">Ochrana osobních údajů</a>
+    </div>
+  </footer>
+
+  <script>
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('nav-mobile');
+    hamburger.addEventListener('click', function() {
+      hamburger.classList.toggle('open');
+      mobileMenu.classList.toggle('open');
+    });
+    mobileMenu.querySelectorAll('a').forEach(function(link) {
+      link.addEventListener('click', function() {
+        hamburger.classList.remove('open');
+        mobileMenu.classList.remove('open');
+      });
+    });
+  </script>
+
+</body>
+</html>
