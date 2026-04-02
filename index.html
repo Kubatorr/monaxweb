@@ -1137,5 +1137,7 @@
     const mobileMenu = document.getElementById('nav-mobile');
 
     hamburger.addEventListener('click', function() {
-      // toggle = "přidej třídu, pokud ji nemá; odeber, pokud ji má"
-      hamburger.classList.tog
+    hamburger.classList.toggle('open');
+    mobileMenu.classList.toggle('open');
+  });
+</script>
